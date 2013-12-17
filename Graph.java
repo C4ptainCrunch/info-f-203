@@ -60,7 +60,7 @@ public class Graph {
         return nodes.get(name);
     }
     public String toDot() {
-        String output = "graph plop {\n";
+        String output = "digraph plop {\n";
         Iterator<Node>nodesIterator = nodes.values().iterator();
         while(nodesIterator.hasNext()) {
             output += nodesIterator.next().toDot();
