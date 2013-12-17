@@ -1,6 +1,8 @@
 import java.lang.Object;
 import java.io.*;
 import java.util.HashMap;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class Graph {
     private HashMap<String,Node> nodes;
@@ -56,6 +58,16 @@ public class Graph {
 
     public Node getNode(String name) {
         return nodes.get(name);
+    }
+    public String toDot() {
+        String output = "graph plop {\n";
+        Iterator<Node>nodesIterator = nodes.values().iterator();
+        while(nodesIterator.hasNext()) {
+            output += nodesIterator.next().toDot();
+            output += "\n";
+        }
+        output += "}";
+        return output;
     }
     
 }

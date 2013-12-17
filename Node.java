@@ -19,4 +19,8 @@ public class Node {
 	public void addDebt(Debt debt) {
 		debts.add(debt);
 	}
+
+	public String toDot() {
+		return " --- ";
+	}
 }
