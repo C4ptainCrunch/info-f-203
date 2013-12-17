@@ -1,11 +1,12 @@
 import java.lang.Object;
 import java.io.*;
+import java.util.HashMap;
 
 public class Graph {
-    private Node[] nodes;
+    private HashMap<String,Node> nodes;
 
     public Graph(int size) {
-        nodes = new Node[size];
+        nodes = new HashMap<String,Node>();
     }
 
     public static Graph fromFile(String fileName) {
@@ -21,12 +22,19 @@ public class Graph {
             int i = 0;
             Node node = null;
             String str[];
-            while (((buffer = reader.readLine()) != null) && (i <= nodeNumber)) {
+            while (((buffer = reader.readLine()) != null) && (i < nodeNumber)) {
                 str = new String[2];
                 str = buffer.split(" ");
                 node = new Node(str[0], Integer.parseInt(str[1]));
                 graph.addNode(node);
                 i++;
+            }
+            Debt debt = null;
+            while ((buffer = reader.readLine()) != null) {
+                str = new String[3];
+                str = buffer.split(" ");
+                debt = new Debt(str[0], str[1], Integer.parseInt(str[2]));
+                graph.addDebt(debt);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -38,7 +46,16 @@ public class Graph {
     }
 
     public void addNode(Node node){
+        nodes.put(node.getName(), node);
+    }
+
+    public void addDebt(Debt debt){
+        getNode(debt.getFrom().getName()).addDebt(debt);
         
+    }
+
+    public Node getNode(String name) {
+        return nodes.get(name);
     }
     
 }

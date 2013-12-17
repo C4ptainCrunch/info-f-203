@@ -10,5 +10,13 @@ public class Node {
 		this.name = name;
 		this.balance = balance;
 	}
+
+	public String getName() {
+		return name;
+	}
 	
+
+	public void addDebt(Debt debt) {
+		debts.add(debt);
+	}
 }
