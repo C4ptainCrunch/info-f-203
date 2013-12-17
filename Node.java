@@ -9,6 +9,7 @@ public class Node {
 	public Node(String name, int balance) {
 		this.name = name;
 		this.balance = balance;
+		isHead = true;
 		debts = new Vector<Debt>();
 	}
 
@@ -20,8 +21,16 @@ public class Node {
 		return balance;
 	}
 
+	public void setHead(boolean isHead) {
+		this.isHead = isHead;
+	}
+
 	public void addDebt(Debt debt) {
 		debts.add(debt);
+	}
+
+	public boolean isHead() {
+		return isHead;
 	}
 
 	public String toDot() {
