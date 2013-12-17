@@ -24,7 +24,7 @@ public class Graph {
             int i = 0;
             Node node = null;
             String str[];
-            while (((buffer = reader.readLine()) != null) && (i < nodeNumber)) {
+            while ((i < nodeNumber) && ((buffer = reader.readLine()) != null)) {
                 str = new String[2];
                 str = buffer.split(" ");
                 node = new Node(str[0], Integer.parseInt(str[1]));
@@ -32,7 +32,7 @@ public class Graph {
                 i++;
             }
             Debt debt = null;
-            while ((buffer = reader.readLine()) != null) {
+            while ((buffer = reader.readLine()) != null) {                
                 str = new String[3];
                 str = buffer.split(" ");
                 debt = Debt.fromInfo(graph, str[0], str[1], Integer.parseInt(str[2]));
@@ -64,7 +64,6 @@ public class Graph {
         Iterator<Node>nodesIterator = nodes.values().iterator();
         while(nodesIterator.hasNext()) {
             output += nodesIterator.next().toDot();
-            output += "\n";
         }
         output += "}";
         return output;

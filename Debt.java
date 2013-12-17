@@ -13,6 +13,14 @@ public class Debt {
 		return from;
 	}
 
+    public Node getTo() {
+        return to;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
     public static Debt fromInfo(Graph graph, String from, String to, int amount) {
         return new Debt(graph.getNode(from), graph.getNode(to), amount);
     }

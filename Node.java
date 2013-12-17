@@ -22,6 +22,10 @@ public class Node {
 	}
 
 	public String toDot() {
-		return " --- ";
+		String str = "";
+		for(int i=0; i < debts.size(); i++){
+			str += name + " -> " + debts.get(i).getTo().getName() + " [label=" + debts.get(i).getAmount() + "];\n";
+		}
+		return str;
 	}
 }
