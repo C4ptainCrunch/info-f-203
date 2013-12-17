@@ -16,6 +16,9 @@ public class Node {
 		return name;
 	}
 	
+	public int getBalance() {
+		return balance;
+	}
 
 	public void addDebt(Debt debt) {
 		debts.add(debt);
@@ -23,8 +26,10 @@ public class Node {
 
 	public String toDot() {
 		String str = "";
+		Debt debt;
 		for(int i=0; i < debts.size(); i++){
-			str += "\"" + name + "\" -> \"" + debts.get(i).getTo().getName() + "\" [label=" + debts.get(i).getAmount() + "];\n";
+			debt = debts.get(i);
+			str += "\"" + name + "\n" + balance + "\" -> \"" + debt.getTo().getName() + "\n" + debt.getTo().getBalance() + "\" [label=" + debt.getAmount() + "];\n";
 		}
 		return str;
 	}
