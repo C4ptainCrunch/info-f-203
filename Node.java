@@ -9,6 +9,7 @@ public class Node {
 	public Node(String name, int balance) {
 		this.name = name;
 		this.balance = balance;
+		debts = new Vector<Debt>();
 	}
 
 	public String getName() {

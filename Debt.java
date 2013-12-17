@@ -4,9 +4,9 @@ public class Debt {
 	private Node to;
 	
 	public Debt(Node from, Node to, int amount){
-        from = from;
-        to = to;
-        amount = amount;
+        this.from = from;
+        this.to = to;
+        this.amount = amount;
 	}
 
 	public Node getFrom() {

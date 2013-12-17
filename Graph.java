@@ -35,7 +35,7 @@ public class Graph {
             while ((buffer = reader.readLine()) != null) {
                 str = new String[3];
                 str = buffer.split(" ");
-                debt = new Debt(str[0], str[1], Integer.parseInt(str[2]));
+                debt = Debt.fromInfo(graph, str[0], str[1], Integer.parseInt(str[2]));
                 graph.addDebt(debt);
             }
         } catch (FileNotFoundException e) {
