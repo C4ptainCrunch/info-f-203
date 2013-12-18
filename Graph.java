@@ -75,6 +75,7 @@ public class Graph {
             if (nodesIterator.hasNext()) {
                 node = nodesIterator.next();
             }
+            // use tagged node and continue iterator
         }
         node.tag();
         for debt in node.debts():
@@ -99,6 +100,7 @@ public class Graph {
                         arrete = stack.get(i)
                         if arrete.amountRemove(minAmount) == 0
                             arrete.getFrom().removeDebt(arrete)
+                            // callback
                         position++
 
 
