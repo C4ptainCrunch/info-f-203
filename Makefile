@@ -13,3 +13,6 @@ classes: $(CLASSES:.java=.class)
 
 clean:
 		$(RM) *.class
+
+graph: classes
+		java Main exemples/1 | dot -Tpng > graph.png

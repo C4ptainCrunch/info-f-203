@@ -39,7 +39,7 @@ public class Node {
 		Node debtTo;
 		for(int i=0; i < debts.size(); i++){
 			debt = debts.get(i);
-			debtTo = debt.getTo()
+			debtTo = debt.getTo();
 			str += String.format("\"%s %d\" -> \"%s %d\" [label=\"%d\"]%n",name, balance, debtTo.getName(), debtTo.getBalance(), debt.getAmount());
 		}
 		return str;
