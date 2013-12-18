@@ -72,50 +72,52 @@ public class Graph {
 
     private void cycleDetect(){
         Iterator<Node>nodesIterator = nodes.values().iterator();
+        Node node;
         if (nodesIterator.hasNext()) {
             node = nodesIterator.next();
-        }
-        // use tagged node and continue iterator
-        stack = new Vector<Debt>();
+            // use tagged node and continue iterator
+            Vector<Debt> stack = new Vector<Debt>();
 
-        cycleDetect(node, stack);
+            cycleDetect(node, stack);
+        }
     }
 
     private void cycleDetect(Node node, Vector<Debt> stack) {
         Iterator<Debt>debtsIterator = node.getDebts().iterator();
-        Debt arrete;
+        Debt arrete = null;
         int minAmount;
-        boolean top;
+        boolean stop;
         int position;
         int i;
+        Debt debt = null;
 
         node.tag();
 
         for (; debtsIterator.hasNext(); debt = debtsIterator.next()) {
             if (stack.lastIndexOf(debt) == -1) {
                 stack.add(debt);
-                cycleDetect(debt, stack);
+                cycleDetect(debt.getTo(), stack);
                 stack.remove(stack.size() - 1);
             }
             else {
                 position = stack.lastIndexOf(debt);
                 minAmount = 0;
-                top = false;
+                stop = false;
                 for (i = 0; i < stack.size() && !stop; i++) {
                     arrete = stack.get(i);
-                    if (arrete.amount == 0) {
+                    if (arrete.getAmount() == 0) {
                         stop = true;
                     }
                     else {
-                        if (arrete.amount < minAmount || minAmount == 0) {
-                            minAmount = arrete.amount;
+                        if (arrete.getAmount() < minAmount || minAmount == 0) {
+                            minAmount = arrete.getAmount();
                         }
                     }
                 }
                 if (!stop) {
                     for (; position < stack.size(); position++)
                         arrete = stack.get(position);
-                        if (arrete.amountRemove(minAmount) == 0) {
+                        if (arrete.amountSubstract(minAmount) == 0) {
                             arrete.getFrom().removeDebt(arrete);
                             // callback
                         }

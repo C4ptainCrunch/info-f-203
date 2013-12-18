@@ -21,7 +21,7 @@ public class Debt {
         return amount;
     }
 
-    public int amountSubtract(int amount) {
+    public int amountSubstract(int amount) {
         this.amount -= amount;
         return this.amount;
     }
