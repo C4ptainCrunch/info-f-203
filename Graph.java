@@ -123,7 +123,7 @@ public class Graph {
                         arrete = stack.get(position);
                         if (arrete.amountSubstract(minAmount) == 0) {
                             arrete.getFrom().removeDebt(arrete);
-                            // callback
+                            System.out.println(String.format("%s %s", arrete.getFrom().getName(), arrete.getTo().getName()));
                         }
                     }
                 }
