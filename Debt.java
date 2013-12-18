@@ -23,6 +23,9 @@ public class Debt {
 
     public int amountSubstract(int amount) {
         this.amount -= amount;
+        if(this.amount == 0){
+            from.removeDebt(this);
+        }
         return this.amount;
     }
 

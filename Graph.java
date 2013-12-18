@@ -108,6 +108,7 @@ public class Graph {
         int j;
         Debt debt = null;
         node.tag();
+        String reduce = "";
 
         for (j = 0; j < debts.size(); j++) {
             debt = debts.get(j);
@@ -125,6 +126,7 @@ public class Graph {
                     position = stackNodes.lastIndexOf(node);
                     minAmount = 0;
                     stop = false;
+                    reduce = "";
                     for (i = position; i < stack.size() && !stop; i++) {
                         arrete = stack.get(i);
                         if (arrete.getAmount() == 0) {
@@ -134,16 +136,18 @@ public class Graph {
                             if (arrete.getAmount() < minAmount || minAmount == 0) {
                                 minAmount = arrete.getAmount();
                             }
+                            reduce += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
                         }
                     }
                     if (!stop) {
+                        System.out.println("Réduction de " + minAmount);
+                        reduce += String.format("%s (%d) -> ...", debt.getFrom().getName(), debt.getAmount());
+                        System.out.println(reduce);
                         for (; position < stack.size(); position++) {
                             arrete = stack.get(position);
                             // System.out.println(String.format("* %s %s", arrete.getFrom().getName(), arrete.getTo().getName()));
-                            if (arrete.amountSubstract(minAmount) == 0) {
-                                arrete.getFrom().removeDebt(arrete);
+                            arrete.amountSubstract(minAmount);
                                 // System.out.println(String.format("%s %s %d", arrete.getFrom().getName(), arrete.getTo().getName(), minAmount));
-                            }
                         }
                     }
                 }
