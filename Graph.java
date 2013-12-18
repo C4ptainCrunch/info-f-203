@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Vector;
 
 public class Graph {
     private HashMap<String,Node> nodes;
@@ -69,19 +70,18 @@ public class Graph {
         return output;
     }
 
-    private cycleDetect(Callable<void> callback, Node node=null, Vector<Debt> stack=null) {
-        if (node == null) {
-            Iterator<Node>nodesIterator = nodes.values().iterator();
-            if (nodesIterator.hasNext()) {
-                node = nodesIterator.next();
-            }
-            // use tagged node and continue iterator
+    private void cycleDetect(){
+        Iterator<Node>nodesIterator = nodes.values().iterator();
+        if (nodesIterator.hasNext()) {
+            node = nodesIterator.next();
         }
-        if (stack == null) {
-            stack = new Vector<Debt>();
-        }
-        node.tag();
+        // use tagged node and continue iterator
+        stack = new Vector<Debt>();
 
+        cycleDetect(node, stack);
+    }
+
+    private void cycleDetect(Node node, Vector<Debt> stack) {
         Iterator<Debt>debtsIterator = node.getDebts().iterator();
         Debt arrete;
         int minAmount;
@@ -89,10 +89,12 @@ public class Graph {
         int position;
         int i;
 
+        node.tag();
+
         for (; debtsIterator.hasNext(); debt = debtsIterator.next()) {
             if (stack.lastIndexOf(debt) == -1) {
                 stack.add(debt);
-                cycleDetect(callback, debt, stack);
+                cycleDetect(debt, stack);
                 stack.remove(stack.size() - 1);
             }
             else {
@@ -100,7 +102,7 @@ public class Graph {
                 minAmount = 0;
                 top = false;
                 for (i = 0; i < stack.size() && !stop; i++) {
-                    arrete = stack.get(i)
+                    arrete = stack.get(i);
                     if (arrete.amount == 0) {
                         stop = true;
                     }
@@ -114,23 +116,13 @@ public class Graph {
                     for (; position < stack.size(); position++)
                         arrete = stack.get(position);
                         if (arrete.amountRemove(minAmount) == 0) {
-                            arrete.getFrom().removeDebt(arrete)
+                            arrete.getFrom().removeDebt(arrete);
                             // callback
                         }
+                    }
                 }
             }
 
-
-
     }
-
-    // private printResolveCycle(){
-    //     resolveCycle();
-    //     print "dfqsdf"
-    // }
-
-    // private resolveCycle(){
-    //     //résoudre 
-    // }
     
 }
