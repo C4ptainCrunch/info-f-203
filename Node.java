@@ -38,7 +38,7 @@ public class Node {
 	}
 
 	public void removeDebt(Debt debt) {
-		debts.remove(debt);
+		debts.set(debts.indexOf(debt), null);
 	}
 
 	public String toDot() {
@@ -47,9 +47,11 @@ public class Node {
 		Node debtTo;
 		for(int i=0; i < debts.size(); i++){
 			debt = debts.get(i);
-			debtTo = debt.getTo();
-			str += String.format("\"%s\\n%d\" -> \"%s\\n%d\" [label=\"%d\"]%n",
-				name, balance, debtTo.getName(), debtTo.getBalance(), debt.getAmount());
+			if(debt != null){
+				debtTo = debt.getTo();
+				str += String.format("\"%s\\n%d\" -> \"%s\\n%d\" [label=\"%d\"]%n",
+					name, balance, debtTo.getName(), debtTo.getBalance(), debt.getAmount());
+			}
 		}
 		return str;
 	}

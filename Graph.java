@@ -55,7 +55,7 @@ public class Graph {
             file.close();
         }
         catch (IOException ex){
-            
+
         }
     }
 
@@ -85,17 +85,19 @@ public class Graph {
         Iterator<Node>nodesIterator = nodes.values().iterator();
         Node node;
         Vector<Debt> stack;
+        Vector<Node> stackNodes;
         while (nodesIterator.hasNext()) {
             node = nodesIterator.next();
             if (!node.isReached()){
                 //System.out.println("dfsfd");
                 stack = new Vector<Debt>();
-                cycleDetect(node, stack);
+                stackNodes = new Vector<Node>();
+                cycleDetect(node, stack, stackNodes);
             }
         }
     }
 
-    private void cycleDetect(Node node, Vector<Debt> stack) {
+    private void cycleDetect(Node node, Vector<Debt> stack, Vector<Node> stackNodes) {
         // System.out.println(node.getName());
         Vector<Debt>debts = node.getDebts();
         Debt arrete = null;
@@ -109,35 +111,39 @@ public class Graph {
 
         for (j = 0; j < debts.size(); j++) {
             debt = debts.get(j);
-            // System.out.println(String.format("!! %s %s", debt.getFrom().getName(), debt.getTo().getName()));
-            if (stack.lastIndexOf(debt) == -1) {
-                stack.add(debt);
+            if(debt != null){
+                // System.out.println(String.format("!! %s %s", debt.getFrom().getName(), debt.getTo().getName()));
+                if (stackNodes.lastIndexOf(node) == -1) {
+                    stack.add(debt);
+                    stackNodes.add(node);
 
-                cycleDetect(debt.getTo(), stack);
-                stack.remove(stack.size() - 1);
-            }
-            else {
-                position = stack.lastIndexOf(debt);
-                minAmount = 0;
-                stop = false;
-                for (i = position; i < stack.size() && !stop; i++) {
-                    arrete = stack.get(i);
-                    if (arrete.getAmount() == 0) {
-                        stop = true;
-                    }
-                    else {
-                        if (arrete.getAmount() < minAmount || minAmount == 0) {
-                            minAmount = arrete.getAmount();
+                    cycleDetect(debt.getTo(), stack, stackNodes);
+                    stack.remove(stack.size() - 1);
+                    stackNodes.remove(stackNodes.size() - 1);
+                }
+                else {
+                    position = stackNodes.lastIndexOf(node);
+                    minAmount = 0;
+                    stop = false;
+                    for (i = position; i < stack.size() && !stop; i++) {
+                        arrete = stack.get(i);
+                        if (arrete.getAmount() == 0) {
+                            stop = true;
+                        }
+                        else {
+                            if (arrete.getAmount() < minAmount || minAmount == 0) {
+                                minAmount = arrete.getAmount();
+                            }
                         }
                     }
-                }
-                if (!stop) {
-                    for (; position < stack.size(); position++) {
-                        arrete = stack.get(position);
-                        // System.out.println(String.format("* %s %s", arrete.getFrom().getName(), arrete.getTo().getName()));
-                        if (arrete.amountSubstract(minAmount) == 0) {
-                            arrete.getFrom().removeDebt(arrete);
-                            // System.out.println(String.format("%s %s %d", arrete.getFrom().getName(), arrete.getTo().getName(), minAmount));
+                    if (!stop) {
+                        for (; position < stack.size(); position++) {
+                            arrete = stack.get(position);
+                            // System.out.println(String.format("* %s %s", arrete.getFrom().getName(), arrete.getTo().getName()));
+                            if (arrete.amountSubstract(minAmount) == 0) {
+                                arrete.getFrom().removeDebt(arrete);
+                                // System.out.println(String.format("%s %s %d", arrete.getFrom().getName(), arrete.getTo().getName(), minAmount));
+                            }
                         }
                     }
                 }
