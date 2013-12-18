@@ -68,5 +68,51 @@ public class Graph {
         output += "}";
         return output;
     }
+
+    private cycleDetect(Callable<void> callback, Node node=null, stack) {
+        if (node == null) {
+            Iterator<Node>nodesIterator = nodes.values().iterator();
+            if (nodesIterator.hasNext()) {
+                node = nodesIterator.next();
+            }
+        }
+        node.tag();
+        for debt in node.debts():
+            if debt not in stack:
+                stack.push(debt)
+                cycleDetect(callback, debt, stack)
+                stack.pop()
+            else:
+                i = position = stack.pos(debt)
+                minAmount = 0
+                stop = false
+                while i < stack.len && !stop:
+                    arrete = stack.get(i)
+                    if  arrete.amount == 0:
+                        stop = true;
+                    else:
+                        if arrete.amount < minAmount || minAmount == 0:
+                            minAmount = arrete.amount
+                    i++
+                if ! stop:
+                    while position < stack.len:
+                        arrete = stack.get(i)
+                        if arrete.amountRemove(minAmount) == 0
+                            arrete.getFrom().removeDebt(arrete)
+                        position++
+
+
+
+
+    }
+
+    // private printResolveCycle(){
+    //     resolveCycle();
+    //     print "dfqsdf"
+    // }
+
+    // private resolveCycle(){
+    //     //résoudre 
+    // }
     
 }

@@ -5,6 +5,7 @@ public class Node {
 	private String name;
 	private Vector<Debt> debts;
 	private boolean isHead;
+	private boolean reached;
 
 	public Node(String name, int balance) {
 		this.name = name;
