@@ -25,10 +25,6 @@ public class Node {
 		debts.add(debt);
 	}
 
-	public boolean isHead() {
-		return isHead;
-	}
-
 	public void tag() {
 		reached = true;
 	}

@@ -7,7 +7,7 @@ public class Debt {
         this.from = from;
         this.to = to;
         this.amount = amount;
-        to.setHead(false);
+        this.setHead(false);
 	}
 
 	public Node getFrom() {
