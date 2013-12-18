@@ -9,7 +9,7 @@ public class Node {
 	public Node(String name, int balance) {
 		this.name = name;
 		this.balance = balance;
-		reached = true;
+		reached = false;
 		debts = new Vector<Debt>();
 	}
 
@@ -27,6 +27,10 @@ public class Node {
 
 	public void tag() {
 		reached = true;
+	}
+
+	public boolean isReached() {
+		return reached;
 	}
 
 	public Vector<Debt> getDebts() {

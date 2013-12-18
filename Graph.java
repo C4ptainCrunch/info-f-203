@@ -73,60 +73,62 @@ public class Graph {
     public void cycleDetect(){
         Iterator<Node>nodesIterator = nodes.values().iterator();
         Node node;
-        if (nodesIterator.hasNext()) {
+        Vector<Debt> stack;
+        while (nodesIterator.hasNext()) {
             node = nodesIterator.next();
-            // use tagged node and continue iterator
-            Vector<Debt> stack = new Vector<Debt>();
-
-            cycleDetect(node, stack);
+            if (!node.isReached()){
+                //System.out.println("dfsfd");
+                stack = new Vector<Debt>();
+                cycleDetect(node, stack);
+            }
         }
     }
 
     private void cycleDetect(Node node, Vector<Debt> stack) {
-        Iterator<Debt>debtsIterator = node.getDebts().iterator();
+        Vector<Debt>debts = node.getDebts();
         Debt arrete = null;
         int minAmount;
         boolean stop;
         int position;
         int i;
+        int j;
         Debt debt = null;
-
         node.tag();
-        if (debtsIterator.hasNext()){
-            for (debt = debtsIterator.next(); debtsIterator.hasNext(); debt = debtsIterator.next()) {
-                if (stack.lastIndexOf(debt) == -1) {
-                    stack.add(debt);
 
-                    cycleDetect(debt.getTo(), stack);
-                    stack.remove(stack.size() - 1);
-                }
-                else {
-                    position = stack.lastIndexOf(debt);
-                    minAmount = 0;
-                    stop = false;
-                    for (i = 0; i < stack.size() && !stop; i++) {
-                        arrete = stack.get(i);
-                        if (arrete.getAmount() == 0) {
-                            stop = true;
-                        }
-                        else {
-                            if (arrete.getAmount() < minAmount || minAmount == 0) {
-                                minAmount = arrete.getAmount();
-                            }
+        for (j = 0; j < debts.size(); j++) {
+            debt = debts.get(j); 
+            if (stack.lastIndexOf(debt) == -1) {
+                stack.add(debt);
+
+                cycleDetect(debt.getTo(), stack);
+                stack.remove(stack.size() - 1);
+            }
+            else {
+                position = stack.lastIndexOf(debt);
+                minAmount = 0;
+                stop = false;
+                for (i = 0; i < stack.size() && !stop; i++) {
+                    arrete = stack.get(i);
+                    if (arrete.getAmount() == 0) {
+                        stop = true;
+                    }
+                    else {
+                        if (arrete.getAmount() < minAmount || minAmount == 0) {
+                            minAmount = arrete.getAmount();
                         }
                     }
-                    if (!stop) {
-                        for (; position < stack.size(); position++)
-                            arrete = stack.get(position);
-                            if (arrete.amountSubstract(minAmount) == 0) {
-                                arrete.getFrom().removeDebt(arrete);
-                                // callback
-                            }
+                }
+                if (!stop) {
+                    for (; position < stack.size(); position++) {
+                        arrete = stack.get(position);
+                        if (arrete.amountSubstract(minAmount) == 0) {
+                            arrete.getFrom().removeDebt(arrete);
+                            // callback
                         }
+                    }
                 }
             }
         }
-
     }
     
 }
