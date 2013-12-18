@@ -4,13 +4,12 @@ public class Node {
 	private int balance;
 	private String name;
 	private Vector<Debt> debts;
-	private boolean isHead;
 	private boolean reached;
 
 	public Node(String name, int balance) {
 		this.name = name;
 		this.balance = balance;
-		isHead = true;
+		reached = true;
 		debts = new Vector<Debt>();
 	}
 
@@ -22,16 +21,24 @@ public class Node {
 		return balance;
 	}
 
-	public void setHead(boolean isHead) {
-		this.isHead = isHead;
-	}
-
 	public void addDebt(Debt debt) {
 		debts.add(debt);
 	}
 
 	public boolean isHead() {
 		return isHead;
+	}
+
+	public void tag() {
+		reached = true;
+	}
+
+	public Vector<Debt> getDebts() {
+		return debts;
+	}
+
+	public void removeDebt(Debt debt) {
+		debts.remove(debt);
 	}
 
 	public String toDot() {
