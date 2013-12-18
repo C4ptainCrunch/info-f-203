@@ -48,6 +48,17 @@ public class Graph {
         return graph;
     }
 
+    public void toFile(String fileName) {
+        try {
+            PrintWriter file = new PrintWriter(fileName, "UTF-8");
+            file.print(toDot());
+            file.close();
+        }
+        catch (IOException ex){
+            
+        }
+    }
+
     public void addNode(Node node){
         nodes.put(node.getName(), node);
     }
