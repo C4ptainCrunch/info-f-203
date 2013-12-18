@@ -22,6 +22,11 @@ public class Debt {
         return amount;
     }
 
+    public int amountSubtract(int amount) {
+        this.amount -= amount;
+        return this.amount;
+    }
+
     public static Debt fromInfo(Graph graph, String from, String to, int amount) {
         return new Debt(graph.getNode(from), graph.getNode(to), amount);
     }
