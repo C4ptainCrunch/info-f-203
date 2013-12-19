@@ -37,7 +37,6 @@ public class Graph {
                 str = new String[3];
                 str = buffer.split(" ");
                 debt = Debt.fromInfo(graph, str[0], str[1], Integer.parseInt(str[2]));
-                graph.addDebt(debt);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -61,11 +60,6 @@ public class Graph {
 
     public void addNode(Node node){
         nodes.put(node.getName(), node);
-    }
-
-    public void addDebt(Debt debt){
-        getNode(debt.getFrom().getName()).addDebt(debt);
-        
     }
 
     public Node getNode(String name) {
@@ -167,6 +161,14 @@ public class Graph {
 
 
     public void resolveDebt() {
-        
+        Iterator<Node>nodesIterator = nodes.values().iterator();
+        Node node;
+        while(nodesIterator.hasNext()) {
+            node = nodesIterator.next();
+            // System.out.println(node);
+            if(node.isHead()){
+                node.resolveDebt();
+            }
+        }
     }
 }
