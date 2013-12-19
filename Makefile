@@ -16,7 +16,7 @@ classes: $(CLASSES:.java=.class)
 clean:
 		$(RM) *.class
 
-run:
+run: classes
 		java Main exemples/1
 
 graph: classes run
