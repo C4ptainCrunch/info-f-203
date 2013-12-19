@@ -1,0 +1,13 @@
+digraph multiCycle {
+    A -> B [label="20" constraint=false]
+    B -> C [label="15" style=bold]
+    // bold or dotted pour le style
+    C -> D [label="70"]
+    D -> B [label="80"]
+    C -> E [label="30"]
+    E -> B [label="42"]
+    E -> F [label="66"]
+    F -> A [label="57"]
+    { rank=same; D B A }
+    { rank=same; C E F }
+}

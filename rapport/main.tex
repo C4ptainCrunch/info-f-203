@@ -73,6 +73,12 @@ Une de celles ci -- la plus évidente surement -- était d'utiliser un simple al
 
 Cependant, nous n'avons pas retenu cette méthode pour une raison simple : si une arrête appartient à plusieurs cycles et que le poids de celle est le plus faible d'un des cycles, celle-ci sera supprimée et la recherche des autres cycles la contenant aura donc été inutile. Dans le pire des cas, l'arrête peut appartenir à tous les cycles d'un graphe et être la plus faible du premier des cycles examiné et donc la totalité des autres cycles auront été calculés en inutilement.
 
+\begin{figure}[h]
+    \caption{\label{multiCycle} Suppression d'une arrête reliant plusieurs cycles}
+    \center
+    \includegraphics[height=150pt]{multiCycle.pdf}
+\end{figure}
+
 
 \subsubsection{Complexité}
 

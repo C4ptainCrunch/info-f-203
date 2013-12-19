@@ -1,4 +1,4 @@
-GRAPH=whyTag.pdf resolve.pdf whyTagSimpl.pdf
+GRAPH=whyTag.pdf resolve.pdf whyTagSimpl.pdf multiCycle.pdf
 
 all: main.pdf
 
@@ -6,11 +6,9 @@ main.pdf: main.tex $(GRAPH)
 	pdflatex main.tex
 	pdflatex main.tex
 
-%.eps:%.ps
-	ps2eps $<
-
 %.pdf:%.dot
 	dot -Tpdf $< -o $@
+	#Utilisation de sfdp ?
 
 graphs: $(GRAPH)
 
