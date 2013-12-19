@@ -74,4 +74,30 @@ public class Node {
 		}
 		return output;
 	}
+
+	public void resolveDebt() {
+		Debt debt;
+		for(int i = 0; i < debts.size() && balance > 0; i++){
+			debt = debts.get(i);
+			if(debt != null){
+			System.out.println(debt.getFrom().name + " -> " + debt.getTo().name);
+				debt.resolveDebt();
+			}
+		}
+	}
+
+	public int pay(int amount){
+		if(amount > balance){
+			amount -= balance;
+			balance = 0;
+		}
+		else{
+			balance -= amount;
+			amount = 0;
+		}
+		return amount;
+	}
+	public void add(int amount) {
+		balance +=amount;
+	}
 }

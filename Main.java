@@ -6,6 +6,8 @@ public class Main {
             graph.toFile("start.gv");
             graph.cycleDetectAndResolve();
             graph.toFile("dettesNoCycles.gv");
+            graph.resolveDebt();
+            graph.toFile("dettesRemb.gv");
         }
         else {
             System.out.println("Boum !");

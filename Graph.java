@@ -89,11 +89,6 @@ public class Graph {
         nodes.put(node.getName(), node);
     }
 
-    public void addDebt(Debt debt){
-        getNode(debt.getFrom().getName()).addDebt(debt);
-        
-    }
-
     public Node getNode(String name) {
         return nodes.get(name);
     }
@@ -204,6 +199,14 @@ public class Graph {
 
 
     public void resolveDebt() {
-        
+        Iterator<Node>nodesIterator = nodes.values().iterator();
+        Node node;
+        while(nodesIterator.hasNext()) {
+            node = nodesIterator.next();
+            // System.out.println(node);
+            if(node.isHead()){
+                node.resolveDebt();
+            }
+        }
     }
 }
