@@ -8,7 +8,6 @@ main.pdf: main.tex $(GRAPH)
 
 %.pdf:%.dot
 	dot -Tpdf $< -o $@
-	#Utilisation de sfdp ?
 
 graphs: $(GRAPH)
 
