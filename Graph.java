@@ -98,7 +98,6 @@ public class Graph {
     }
 
     private void cycleDetect(Node node, Vector<Debt> stack, Vector<Node> stackNodes) {
-        // System.out.println(node.getName());
         Vector<Debt>debts = node.getDebts();
         Debt arrete = null;
         int minAmount;
@@ -113,7 +112,6 @@ public class Graph {
         for (j = 0; j < debts.size(); j++) {
             debt = debts.get(j);
             if(debt != null){
-                // System.out.println(String.format("!! %s %s", debt.getFrom().getName(), debt.getTo().getName()));
                 if (stackNodes.lastIndexOf(node) == -1) {
                     stack.add(debt);
                     stackNodes.add(node);
@@ -147,7 +145,6 @@ public class Graph {
                         reduce = "";
                         for (; position < stack.size(); position++) {
                             arrete = stack.get(position);
-                            // System.out.println(String.format("* %s %s", arrete.getFrom().getName(), arrete.getTo().getName()));
                             if (arrete.amountSubstract(minAmount) == 0){
                                 if(reduce.length() > 0)
                                     reduce += arrete.getFrom().getName() + "\n";
@@ -155,7 +152,6 @@ public class Graph {
                             else{
                                 reduce += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
                             }
-                                // System.out.println(String.format("%s %s %d", arrete.getFrom().getName(), arrete.getTo().getName(), minAmount));
                         }
                         if(!reduce.endsWith("\n"))
                             reduce += node.getName();
@@ -167,7 +163,5 @@ public class Graph {
                 }
             }
         }
-    // System.out.println("sortie:" + node.getName());
     }
-    
 }
