@@ -10,7 +10,7 @@ public class Main {
             graph.toFile("dettesRemb.gv");
         }
         else {
-            System.out.println("Boum !");
+            System.out.println("Ce fichier n'existe pas.");
         }
         
     }

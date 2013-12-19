@@ -137,11 +137,32 @@ public class Graph {
         return minAmount;
     }
 
+    private void cycleBreak(int position, DebtStack stack, int minAmount){
+        String cycleString = "";
+        Debt arrete = null;
+
+        for (int i = position; i < stack.size(); i++) {
+            arrete = stack.get(i);
+            if (arrete.amountSubstract(minAmount) == 0){
+                if(cycleString.length() > 0)
+                    cycleString += arrete.getFrom().getName() + "\n";
+            }
+            else{
+                cycleString += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
+            }
+        }
+        if(!cycleString.endsWith("\n"))
+            cycleString += stack.get(position).getFrom().getName();
+        else
+            cycleString = cycleString.substring(0, cycleString.length()-1);
+        System.out.println("Nouvelle situation:");
+        System.out.println(cycleString);
+    }
+
     private void cycleResolve(Node currentNode, Debt currentDebt, DebtStack stack) {
         StringBuilder cycleString = new StringBuilder("");
         int minAmount = 0;
         int position, i;
-        Debt arrete = null;
 
         position = stack.lastIndexOfNode(currentNode);
         minAmount = minimalDebt(position, stack, cycleString);
@@ -151,23 +172,7 @@ public class Graph {
             cycleString.append(String.format("%s (%d) -> ...", currentDebt.getFrom().getName(), currentDebt.getAmount()));
             System.out.println(cycleString);
 
-            String cycle2 = "";
-            for (; position < stack.size(); position++) {
-                arrete = stack.get(position);
-                if (arrete.amountSubstract(minAmount) == 0){
-                    if(cycle2.length() > 0)
-                        cycle2 += arrete.getFrom().getName() + "\n";
-                }
-                else{
-                    cycle2 += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
-                }
-            }
-            if(!cycle2.endsWith("\n"))
-                cycle2 += currentNode.getName();
-            else
-                cycle2 = cycle2.substring(0, cycle2.length()-1);
-            System.out.println("Nouvelle situation:");
-            System.out.println(cycle2);
+            cycleBreak(position, stack, minAmount);
         }
     }
 

@@ -68,8 +68,6 @@ public class Node {
 			// if debt is solved, it is setted to null
 			if(debt != null) {
 				debtTo = debt.getTo();
-				// format a string like that : "CI\n75" -> "CJC\n40" [label="15"]
-				//								"source\nsource-money" -> "destination\ndestination-money" [label="debt-amount"]
 				output += String.format("\"%s\\n%d\" -> \"%s\\n%d\" [label=\"%d\"]%n",
 					name, balance, debtTo.getName(), debtTo.getBalance(), debt.getAmount());
 			}
@@ -79,7 +77,6 @@ public class Node {
 
 	public void resolveDebt() {
 		Debt debt;
-		// Collections.sort(debts);
 		for(int i = 0; i < debts.size(); i++){
 			debt = debts.get(i);
 			if(debt != null){
