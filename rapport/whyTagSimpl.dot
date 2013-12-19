@@ -10,9 +10,10 @@ digraph cercle {
     A -> B [constraint=false label="20"]
     B -> C [label="30"]
     C -> D [label="30"]
-    D -> E [label="40"]
-    E -> F [label="50"]
-    F -> A [constraint=false label="70"]
+    D -> E [label="30"]
+    E -> F [label="40"]
+    A -> D [style=invis]
+    F -> A [constraint=false label="60"]
     { rank=same; B A F "Noeud marqué" }
     { rank=same; C D E "Noeud non marqué" }
 }
