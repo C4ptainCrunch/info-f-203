@@ -140,15 +140,29 @@ public class Graph {
                         }
                     }
                     if (!stop) {
-                        System.out.println("Réduction de " + minAmount);
+                        System.out.println("\nRéduction de " + minAmount);
                         reduce += String.format("%s (%d) -> ...", debt.getFrom().getName(), debt.getAmount());
                         System.out.println(reduce);
+
+                        reduce = "";
                         for (; position < stack.size(); position++) {
                             arrete = stack.get(position);
                             // System.out.println(String.format("* %s %s", arrete.getFrom().getName(), arrete.getTo().getName()));
-                            arrete.amountSubstract(minAmount);
+                            if (arrete.amountSubstract(minAmount) == 0){
+                                if(reduce.length() > 0)
+                                    reduce += arrete.getFrom().getName() + "\n";
+                            }
+                            else{
+                                reduce += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
+                            }
                                 // System.out.println(String.format("%s %s %d", arrete.getFrom().getName(), arrete.getTo().getName(), minAmount));
                         }
+                        if(!reduce.endsWith("\n"))
+                            reduce += node.getName();
+                        else
+                            reduce = reduce.substring(0, reduce.length()-1);
+                        System.out.println("Nouvelle situation:");
+                        System.out.println(reduce);
                     }
                 }
             }
