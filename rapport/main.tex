@@ -25,7 +25,7 @@ Certains cercles ont de l'argent sur leur compte en banque, l'étape suivante ap
 
 
 \section{Détection de cycles et suppression}
-Une première apporche à laquelle nous avons pensé est d'utiliser un algorithme de détection de cycles (par exemple celui vu au cours théorique\footnote{Alorithmique-2 (info-f-203) par Bernard \textsc{Fortz} et Olivier \textsc{Markowitch}, pp 44-46}) et par la suite de les supprimer. Cependant, nous n'avons pas rentenu cette méthode pour des raisons de performance expliqués au point \ref{others}.
+Une première approche à laquelle nous avons pensé est d'utiliser un algorithme de détection de cycles (par exemple celui vu au cours théorique\footnote{Algorithmique-2 (info-f-203) par Bernard \textsc{Fortz} et Olivier \textsc{Markowitch}, pp 44-46}) et par la suite de les supprimer. Cependant, nous n'avons pas retenu cette méthode pour des raisons de performance expliqués au point \ref{others}.
 
 \subsection{Détection}
 \label{detect}
@@ -37,7 +37,7 @@ Quand nous arrivons à une feuille, nous repartons en arrière jusqu'à l'embran
 
 A la fin de ce premier parcours, nous vérifions que tous les noeuds ont été parcourus (c'est à dire marqués) et si un noeud ne l'est pas, nous recommençons le même algorithme à partir de celui-ci.
 
-Lors de le recheche de cycle, nous passons par les noeuds déjà marqués car, il est possible qu'il faille passer par un noeud déjà marqué pour supprimer un cycle supplémentaire(voir figure)
+Lors de le recherche de cycle, nous passons par les noeuds déjà marqués car, il est possible qu'il faille passer par un noeud déjà marqué pour supprimer un cycle supplémentaire (voir figure)
 
 %Mettre le diagram whyTag.dot ici
 \begin{figure}[h]
@@ -45,15 +45,15 @@ Lors de le recheche de cycle, nous passons par les noeuds déjà marqués car, i
    \includegraphics[]{whyTag.pdf}
 \end{figure}
 
-Ce qui nous donnerait apres premier passage (Si on supprime l'arrête $A \rightarrow D$ du cycle $A \rightarrow D \rightarrow E \rightarrow F \rightarrow A \rightarrow\ldots$):
+Ce qui nous donne après un premier passage (ou l'on supprime l'arrête $A \rightarrow D$ du cycle $A \rightarrow D \rightarrow E \rightarrow F \rightarrow A$) la figure %figure !%
 %Mettre le diagram whyTagSimpl.dot ici
 
-Lorsqu'on va arriver au noeud $D$, on va regarder si on peut passer au noeud $B$. Comme il est déjà marqué, nous allons pas nous en occuper et revenir en arrière. Nous allons donc pas détecter le cycle $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow A \rightarrow\ldots$  .
+Lorsqu'on arrive au noeud $D$, on va regarder si on peut passer au noeud $B$ qui est déjà marqué. Si nous avions décidé de l'ignorer et que nous revenons en arrière nous n'aurions pas détecté le cycle $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow A$.
 
 \subsection{Suppression}
 \label{del}
 
-Quand un cycle est détecté (avec le méthode décrite en \ref{detect}) nous devons le supprimer. Pour cela, nous devons le parcourrir -- c'est à dire en parcourrant les arrêtes la pile du bas vers le haut en commencant à l'index $i$ -- en cherchant l'arrête de poids le plus faible. Une fois ce poids déterminé, nous re-parcourons le cycle en soustrayant ce poids à chaque arrête (et en supprimant celles dont le poids atteind 0)
+Quand un cycle est détecté (avec le méthode décrite en \ref{detect}) nous devons le supprimer. Pour cela, nous devons le parcourir -- c'est à dire en parcourant la pile des arrêtes du bas vers le haut en commençant à l'index $i$ -- en cherchant l'arrête de poids le plus faible. Une fois ce poids déterminé, nous re-parcourons le cycle en soustrayant ce poids à chaque arrête (et en supprimant celles dont le poids atteint 0)
 
 
 
