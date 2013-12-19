@@ -1,51 +1,78 @@
-//import java.lang.Object;
 import java.io.*;
 import java.util.HashMap;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 
 public class Graph {
     private HashMap<String,Node> nodes;
+    private int order;
 
     public Graph(int size) {
         nodes = new HashMap<String,Node>();
+        order = size;
     }
 
+    // Create a new graph from a file.
     public static Graph fromFile(String fileName) {
         File file = new File(fileName);
         BufferedReader reader = null;
         Graph graph = null;
-        int nodeNumber;
+        
         try {
+            int order;
             reader = new BufferedReader(new FileReader(file));
-            nodeNumber = Integer.parseInt(reader.readLine());
-            graph = new Graph(nodeNumber);
-            String buffer = null;
-            int i = 0;
-            Node node = null;
-            String str[];
-            while ((i < nodeNumber) && ((buffer = reader.readLine()) != null)) {
-                str = new String[2];
-                str = buffer.split(" ");
-                node = new Node(str[0], Integer.parseInt(str[1]));
-                graph.addNode(node);
-                i++;
-            }
-            Debt debt = null;
-            while ((buffer = reader.readLine()) != null) {                
-                str = new String[3];
-                str = buffer.split(" ");
-                debt = Debt.fromInfo(graph, str[0], str[1], Integer.parseInt(str[2]));
-                graph.addDebt(debt);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            order = Integer.parseInt(reader.readLine());
+            graph = new Graph(order);
+            
+            graph.addNodesFromReader(reader);
+            graph.addDebtsFromReader(reader);
+            
+        } 
+        catch (FileNotFoundException e) {
+            System.out.println("File not found.");
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
         return graph;
+    }
+
+    private void addNodesFromReader(BufferedReader reader) {
+        String buffer = null;
+        int i = 0;
+        Node node = null;
+        String output[];
+        try{
+            while ((i < order) && ((buffer = reader.readLine()) != null)) {
+                output = new String[2];
+                output = buffer.split(" ");
+                node = new Node(output[0], Integer.parseInt(output[1]));
+                addNode(node);
+                i++;
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void addDebtsFromReader(BufferedReader reader){
+        Debt debt = null;
+        String buffer = null;
+        String output[];
+        try{
+            while ((buffer = reader.readLine()) != null) {                
+                output = new String[3];
+                output = buffer.split(" ");
+                debt = Debt.fromInfo(this, output[0], output[1], Integer.parseInt(output[2]));
+                addDebt(debt);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void toFile(String fileName) {
