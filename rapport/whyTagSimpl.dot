@@ -1,6 +1,8 @@
 digraph cercle {
     B
     C
+    "Noeud marqué" [style=filled]
+    "Noeud non marqué"
     A[style=filled]
     F[style=filled]
     D[style=filled]
@@ -11,6 +13,6 @@ digraph cercle {
     D -> E [label="40"]
     E -> F [label="50"]
     F -> A [constraint=false label="70"]
-    { rank=same; B A F }
-    { rank=same; C D E }
+    { rank=same; B A F "Noeud marqué" }
+    { rank=same; C D E "Noeud non marqué" }
 }
