@@ -19,9 +19,9 @@
 
 Ce projet d'algorithmique de deuxième année porte sur les graphes et plus particulièrement les graphes dirigés.
 
-Le problème est posé aux étudiants comme ceci : nous devons écrire un programme qui reçoit un graphe dans lequel chaque noeud représente un cercle étudiant et les arrêtes de celui-ci représentent les dettes qu'ils ont contracté envers d'autres cercles. Le but du projet est de détecter les cycles dans ce graphe et de les résoudre.
+Le problème est posé aux étudiants comme ceci : il faut écrire un programme qui reçoit un graphe dans lequel chaque noeud représente un cercle étudiant et les arrêtes de celui-ci représentent les dettes que les cercles ont contracté entre eux. Le but du projet est de détecter les cycles dans ce graphe et de les résoudre.
 
-Certains cercles ont de l'argent sur leur compte en banque, l'étape suivante après avoir résolu les cycles  est de déterminer dans quel ordre les cercles pourront se rembourser les uns les autres.
+Pour finir, certains cercles ont de l'argent sur leur compte en banque : l'étape après avoir résolu les cycles est donc de déterminer dans quel ordre les cercles pourront se rembourser les uns les autres.
 
 
 \section{Détection de cycles et suppression}
@@ -29,30 +29,35 @@ Une première approche à laquelle nous avons pensé est d'utiliser un algorithm
 
 \subsection{Détection}
 \label{detect}
-L'approche retenue a été de parcourir le graphe en profondeur, depuis un noeud quelconque, en marquant les noeuds sur notre passage, tout en empilant sur une stack\footnote{Cette stack (ou pile) n'en  est pas une au vrai sens du terme. En effet, en plus des opérations \texttt{push} et \texttt{pop}, elle supporte aussi les \texttt{get} à un index arbitraire} les arrêtes par lesquelles nous passons. Juste avant d'empiler une arrête, nous vérifions que le noeud de départ de l'arrête n'a pas été déjà empilé (en tant que noeud de départ) sur cette même pile.
+L'approche retenue a été de parcourir le graphe en profondeur depuis un noeud quelconque en marquant les noeuds sur notre passage tout en empilant sur une stack\footnote{Cette stack (ou pile) n'en  est pas une au vrai sens du terme. En effet, en plus des opérations \texttt{push} et \texttt{pop}, elle supporte aussi les \texttt{get} à un index arbitraire} les arrêtes par lesquelles nous passons. Juste avant d'empiler une arrête, nous vérifions que le noeud de départ de l'arrête n'a pas été déjà empilé en tant que noeud de départ d'une arête de cette même pile.
 
-Si c'est le cas, nous retenons l'index de cette arrête dans la pile (nommons le $i$) et c'est que nous avons détecté un cycle et nous le supprimons avec l'algorithme décrit au point \ref{del} et revenons à celui-ci.
+Si c'est le cas, nous retenons l'index de cette arrête dans la pile (nommons le $i$) et c'est que nous avons détecté un cycle et nous le supprimons donc avec l'algorithme décrit au point \ref{del} puis revenons à celui-ci.
 
 Quand nous arrivons à une feuille, nous repartons en arrière jusqu'à l'embranchement précédent jusqu'à finir le parcours.
 
-A la fin de ce premier parcours, nous vérifions que tous les noeuds ont été parcourus (c'est à dire marqués) et si un noeud ne l'est pas, nous recommençons le même algorithme à partir de celui-ci.
+A la fin de ce premier parcours, nous vérifions que tous les noeuds ont été parcourus (c'est à dire marqués) et si un noeud ne l'est pas, nous recommençons le même algorithme à partir de celui-ci.\\
 
-Lors de le recherche de cycle, nous passons par les noeuds déjà marqués car, il est possible qu'il faille passer par un noeud déjà marqué pour supprimer un cycle supplémentaire (voir figure \ref{whyTag})
+Lors de le recherche de cycle, nous passons par les noeuds déjà marqués car il est possible qu'il faille passer par un noeud déjà marqué pour supprimer un cycle supplémentaire (voir figure \ref{whyTag} et \ref{whyTagSimpl})
 
 
 \begin{figure}[h]
-   \caption{\label{whyTag} titre}
+   \caption{\label{whyTag} Passage multiple par un noeud : situation initiale}
    \begin{center}
-   \includegraphics[scale=0.5]{whyTag.pdf}
+   \includegraphics[height=150pt]{whyTag.pdf}
    \end{center}
 \end{figure}
-\includegraphics[scale=0.5]{whyTag.pdf}
 
-Ce qui nous donne après un premier passage (ou l'on supprime l'arrête $A \rightarrow D$ du cycle $A \rightarrow D \rightarrow E \rightarrow F \rightarrow A$) la figure %
+La figure \ref{whyTag} est transformée en la figure \ref{whyTagSimpl} après un premier passage
+(ou l'on supprime l'arrête $A \rightarrow D$ du cycle $A \rightarrow D \rightarrow E \rightarrow F \rightarrow A$)
+
 \begin{figure}[h]
-   \caption{\label{whyTagSimpl} titre}
-   \includegraphics[]{whyTagSimpl.pdf}
+   \caption{\label{whyTagSimpl} Passage multiple par un noeud : situation après suppression d'un cycle}
+   \begin{center}
+   \includegraphics[height=150pt]{whyTagSimpl.pdf}
+   \end{center}
 \end{figure}
+
+
 Lorsqu'on arrive au noeud $D$, on va regarder si on peut passer au noeud $B$ qui est déjà marqué. Si nous avions décidé de l'ignorer et que nous revenons en arrière nous n'aurions pas détecté le cycle $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow A$.
 
 \subsection{Suppression}
