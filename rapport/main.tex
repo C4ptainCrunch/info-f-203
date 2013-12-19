@@ -1,3 +1,4 @@
+%!TEX encoding = UTF-8 Unicode
 \documentclass[12pt, oneside]{article}
 \usepackage{geometry}
 \geometry{letterpaper}
@@ -7,7 +8,7 @@
 \usepackage[francais]{babel}
 
 
-\title{{\normalsize{INFO-F-203 -- Algorithmique 2}}\\Manipulation de graphes :\\ Transfert d’argent}
+\title{{\normalsize{INFO-F-203 -- Algorithmique 2}}\\Manipulation de graphes\\ Transfert d’argent}
 \author{Romain \textsc{Fontaine} \and Nikita \textsc{Marchant}}
 %\date{20/12/13}
 
@@ -18,19 +19,25 @@
 
 Ce projet d'algorithmique de deuxième année porte sur les graphes et plus particulièrement les graphes dirigés.
 
-Le problème est posé aux étudiants comme ceci : chaque noeud du graphe représente un cercle étudiant et les arrêtes représentent les dettes qu'ils ont contracté envers d'autres cercles. Le but du projet est de détecter les cycles dans ce graphe et de les résoudre. Certains cercles ont de l'argent sur leur compte en banque, l'étape suivante après avoir résolu les cycles  est de déterminer dans quel ordre les cercles pourront se rembourser les uns les autres.
+Le problème est posé aux étudiants comme ceci : nous devons écrire un programme qui reçoit un graphe dans lequel chaque noeud représente un cercle étudiant et les arrêtes de celui-ci représentent les dettes qu'ils ont contracté envers d'autres cercles. Le but du projet est de détecter les cycles dans ce graphe et de les résoudre.
+
+Certains cercles ont de l'argent sur leur compte en banque, l'étape suivante après avoir résolu les cycles  est de déterminer dans quel ordre les cercles pourront se rembourser les uns les autres.
 
 
 \section{Détection de cycles et suppression}
-Une première apporche à laquelle nous avons pensé est d'utiliser un algorithme de détection de cycles (par exemple celui vu au cours théorique\footnote{Alorithmique-2 (info-f-203) par Bernard \textsc{Fortz} et Olivier \textsc{Markowitch}, pp 44-46}) et par la suite de les supprimer. Cependant, nous n'avons pas rentenu cette méthode pour des raisons de performance expliqués au point \ref{others}.
+Une première approche à laquelle nous avons pensé est d'utiliser un algorithme de détection de cycles (par exemple celui vu au cours théorique\footnote{Algorithmique-2 (info-f-203) par Bernard \textsc{Fortz} et Olivier \textsc{Markowitch}, pp 44-46}) et par la suite de les supprimer. Cependant, nous n'avons pas retenu cette méthode pour des raisons de performance expliqués au point \ref{others}.
 
 \subsection{Détection}
 \label{detect}
-L'approche retenue a été de parcourir le graphe en profondeur, depuis un noeud quelconque, en marquant les noeuds sur notre passage, tout en empilant sur une stack\footnote{Cette stack (ou pile) n'en  est pas une au vrai sens du terme. En effet, en plus des opérations \texttt{push} et \texttt{pop}, elle supporte aussi les \texttt{get} à un index arbitraire} les arrêtes par lesquelles nous passons. Juste avant d'emplier une arrête, nous vérifions que le noeud de départ de l'arrête n'a pas été déjà empilé (en tant que noeud de départ) sur cette même pile. Si c'est le cas, nous retenons l'index de cette arrête (nommons le $i$) et c'est que nous avons détecté un cycle et nous le supprimons donc (voir l'algorithme décrit au point \ref{del}). Quand nous arrivons à une feuille, nous repartons donc en arrière jusqu'à l'embranchement précédent jusqu'à finir le parcours.
+L'approche retenue a été de parcourir le graphe en profondeur, depuis un noeud quelconque, en marquant les noeuds sur notre passage, tout en empilant sur une stack\footnote{Cette stack (ou pile) n'en  est pas une au vrai sens du terme. En effet, en plus des opérations \texttt{push} et \texttt{pop}, elle supporte aussi les \texttt{get} à un index arbitraire} les arrêtes par lesquelles nous passons. Juste avant d'emplier une arrête, nous vérifions que le noeud de départ de l'arrête n'a pas été déjà empilé (en tant que noeud de départ) sur cette même pile.
 
-A la fin de ce premier parcours, nous vérifions que tous les noeuds ont été parcourrus (c'est à dire marqués) et si un noeud ne l'est pas, nous recommencons le même algorithme à partir de celui-ci.
+Si c'est le cas, nous retenons l'index de cette arrête dans la pile (nommons le $i$) et c'est que nous avons détecté un cycle et nous le supprimons avec l'algorithme décrit au point \ref{del} et revenons à celui-ci.
 
-Lors de le recheche de cycle, nous passons par les noeuds déjà marqués car, il est possible qu'il faille passer par un noeud déjà marqué pour supprimer un cycle supplémentaire(voir figure \ref{whyTag})
+Quand nous arrivons à une feuille, nous repartons en arrière jusqu'à l'embranchement précédent jusqu'à finir le parcours.
+
+A la fin de ce premier parcours, nous vérifions que tous les noeuds ont été parcourus (c'est à dire marqués) et si un noeud ne l'est pas, nous recommençons le même algorithme à partir de celui-ci.
+
+Lors de le recherche de cycle, nous passons par les noeuds déjà marqués car, il est possible qu'il faille passer par un noeud déjà marqué pour supprimer un cycle supplémentaire (voir figure \ref{whyTag}))
 
 \begin{figure}[h]
    \caption{\label{whyTag} titre}
@@ -40,21 +47,21 @@ Lors de le recheche de cycle, nous passons par les noeuds déjà marqués car, i
 \end{figure}
 \includegraphics[scale=0.5]{whyTag.eps}
 
-Ce qui nous donnerait apres premier passage (Si on supprime l'arrête $A \rightarrow D$ du cycle $A \rightarrow D \rightarrow E \rightarrow F \rightarrow A \rightarrow\ldots$):
+Ce qui nous donne après un premier passage (ou l'on supprime l'arrête $A \rightarrow D$ du cycle $A \rightarrow D \rightarrow E \rightarrow F \rightarrow A$) la figure %
 \begin{figure}[h]
    \caption{\label{whyTagSimpl} titre}
    \includegraphics[]{whyTagSimpl.eps}
 \end{figure}
-Lorsqu'on va arriver au noeud $D$, on va regarder si on peut passer au noeud $B$. Comme il est déjà marqué, nous allons pas nous en occuper et revenir en arrière. Nous allons donc pas détecter le cycle $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow A \rightarrow\ldots$  .
+Lorsqu'on arrive au noeud $D$, on va regarder si on peut passer au noeud $B$ qui est déjà marqué. Si nous avions décidé de l'ignorer et que nous revenons en arrière nous n'aurions pas détecté le cycle $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow A$.
 
 \subsection{Suppression}
 \label{del}
 
-Quand un cycle est détecté (avec le méthode décrite en \ref{detect}) nous devons le supprimer. Pour cela, nous devons le parcourrir -- c'est à dire en parcourrant les arrêtes la pile du bas vers le haut en commencant à l'index $i$ -- en cherchant l'arrête de poids le plus faible. Une fois ce poids déterminé, nous re-parcourons le cycle en soustrayant ce poids à chaque arrête (et en supprimant celles dont le poids atteind 0)
+Quand un cycle est détecté (avec le méthode décrite en \ref{detect}) nous devons le supprimer. Pour cela, nous devons le parcourir -- c'est à dire en parcourant la pile des arrêtes du bas vers le haut en commençant à l'index $i$ -- en cherchant l'arrête de poids le plus faible. Une fois ce poids déterminé, nous re-parcourons le cycle en soustrayant ce poids à chaque arrête (et en supprimant celles dont le poids atteint 0)
 
 
 
-\subsubsection{Autres possibilités}
+\subsection{Autres possibilités}
 \label{others}
 
 Dans la section \ref{detect} nous évoquions les autres possibilités auxquelles nous avons pensé mais que nous n'avons pas retenues. Une de celles ci -- la plus évidente surement -- était d'utiliser un simple algorithme de détection de cycles et donc de parcourir l'enièreté du graphe pour ensuite supprimer les cycles uns à uns. Cependant, nous n'avons pas rentenu cette méthode pour une raison simple : si une arrête appartient à plusieurs cycles et est de poids le plus faible dans un minimum un cycle, celle-ci sera supprimée et la racherche du 2ème cycle aura donc été inutile. Dans le pire des cas, l'arrête peut appartenir à tous les cycles et être la plus faible du premier des cycles, la totalité des autres cycles ayant été calculés en inutilement.
