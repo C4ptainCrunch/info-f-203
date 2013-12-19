@@ -87,9 +87,9 @@ Quand cette opération est finie, nous recommençons pour la tête suivante.
 Le fait d'effectuer cette opération sur chaque tête est bien entendu obligatoire car tous les noeuds ne sont pas accessibles depuis n'importe quelle tête (et le graphe pourrait en plus ne pas être connecté). Cependant, on pourrait penser que repasser sur un noeud quelconque si il a déjà été parcouru est inutile et qu'il faudrait donc les marquer pour éviter cela. Or nous devons parcourir à chaque fois tout le sous-graphe accessible depuis la tête courante puisqu'on peut débloquer une situation du type $C \rightarrow D$ ou $C$ n'a pas assez d'argent après le versement de $A$ vers $C$ mais en aura assez après celui de $B$ (voir figure \ref{resolve}).
 
 \begin{figure}[h]
-   \caption{\label{resolve} titre}
+   \caption{\label{resolve} Remboursement en plusieurs étapes}
    \begin{center}
-   \includegraphics[]{resolve.pdf}
+   \includegraphics[height=150pt]{resolve.pdf}
    \end{center}
 \end{figure}
 \subsubsection{Complexité}
