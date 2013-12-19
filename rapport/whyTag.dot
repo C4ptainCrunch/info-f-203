@@ -1,0 +1,12 @@
+digraph cercle {
+    A -> B [label="10"]
+    A -> C [constraint=false label="20"]
+    C -> D [label="30"]
+    D -> B [label="40"]
+    B -> E [label="30"]
+    E -> F [label="50"]
+    F -> A [constraint=false label="70"]
+    { rank=same; A C F }
+    { rank=same; B D E }
+
+}
