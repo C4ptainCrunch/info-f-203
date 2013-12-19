@@ -6,6 +6,8 @@ main.pdf: main.tex $(GRAPH)
 	pdflatex main.tex
 	pdflatex main.tex
 
+%.eps:%.ps
+	ps2eps $<
 
 %.pdf:%.dot
 	dot -Tpdf $< -o $@
@@ -21,5 +23,3 @@ cleang:
 
 clean: cleanall
 	$(RM) main.pdf
-
-
