@@ -58,7 +58,7 @@ La figure \ref{whyTag} est transformée en la figure \ref{whyTagSimpl} après un
 \end{figure}
 
 
-Dans la figure \ref{whyTagSimpl}, lorsqu'on arrive au noeud $D$, on va regarder si on peut passer au noeud $B$ qui est déjà marqué. Si nous avions décidé de l'ignorer et que nous revenons en arrière nous n'aurions pas détecté le cycle $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow A$.
+Dans la figure \ref{whyTagSimpl}, lorsqu'on arrive au noeud $C$, on va regarder si on peut passer au noeud $D$ qui est déjà marqué. Si nous avions décidé de l'ignorer et que nous revenons en arrière nous n'aurions pas détecté le cycle $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow A$.
 
 \subsection{Suppression}
 \label{del}
@@ -88,9 +88,8 @@ Le fait d'effectuer cette opération sur chaque tête est bien entendu obligatoi
 
 \begin{figure}[h]
    \caption{\label{resolve} Remboursement en plusieurs étapes}
-   \begin{center}
+   \center
    \includegraphics[height=150pt]{resolve.pdf}
-   \end{center}
 \end{figure}
 \subsubsection{Complexité}
 
