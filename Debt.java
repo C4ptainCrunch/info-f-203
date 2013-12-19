@@ -25,9 +25,7 @@ public class Debt {
 
     public int amountSubstract(int amount) {
         this.amount -= amount;
-        System.out.println(this.amount);
         if(this.amount == 0){
-            System.out.println("del");
             from.removeDebt(this);
             to.delCreance();
         }

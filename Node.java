@@ -83,7 +83,6 @@ public class Node {
 		for(int i = 0; i < debts.size(); i++){
 			debt = debts.get(i);
 			if(debt != null){
-			System.out.println(debt.getFrom().name + " -> " + debt.getTo().name);
 			debt.resolveDebt();
 			}
 		}

@@ -205,7 +205,6 @@ public class Graph {
         Node node;
         while(nodesIterator.hasNext()) {
             node = nodesIterator.next();
-            // System.out.println(node);
             if(node.isHead()){
                 node.resolveDebt();
             }
