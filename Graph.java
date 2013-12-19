@@ -81,7 +81,7 @@ public class Graph {
             file.close();
         }
         catch (IOException ex){
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -120,51 +120,55 @@ public class Graph {
         }
     }
 
+    private int minimalDebt(int position, DebtStack stack, String cycleString){
+        int minAmount = 0;
+        Debt arrete;
+        for (int i = position; i < stack.size() && minAmount != -1 ; i++) {
+            arrete = stack.get(i);
+            cycleString += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
+
+            if (arrete.getAmount() == 0)
+                // Cycle detected previousy was broken, abort
+                minAmount = -1;
+            else if(arrete.getAmount() < minAmount || minAmount == 0)
+                // lower amount found
+                minAmount = arrete.getAmount();
+        }
+
+        return minAmount;
+    }
+
     private void cycleResolve(Node currentNode, Debt currentDebt, DebtStack stack) {
-        boolean stop = false;
-        String reduce = "";
+        String cycleString = "";
         int minAmount = 0;
         int position, i;
         Debt arrete = null;
 
         position = stack.lastIndexOfNode(currentNode);
-
-        for (i = position; i < stack.size() && !stop; i++) {
-            arrete = stack.get(i);
-            if (arrete.getAmount() == 0) {
-                // Cycle detected previousy was broken
-                // abort
-                stop = true;
-            }
-            else {
-                if (arrete.getAmount() < minAmount || minAmount == 0) {
-                    minAmount = arrete.getAmount();
-                }
-                reduce += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
-            }
-        }
-        if (!stop) {
+        minAmount = minimalDebt(position, stack, cycleString);
+        if (minAmount != -1) {
             System.out.println("\nRéduction de " + minAmount);
-            reduce += String.format("%s (%d) -> ...", currentDebt.getFrom().getName(), currentDebt.getAmount());
-            System.out.println(reduce);
+            // re-add first node to the end of the string
+            cycleString += String.format("%s (%d) -> ...", currentDebt.getFrom().getName(), currentDebt.getAmount());
+            System.out.println(cycleString);
 
-            reduce = "";
+            cycleString = "";
             for (; position < stack.size(); position++) {
                 arrete = stack.get(position);
                 if (arrete.amountSubstract(minAmount) == 0){
-                    if(reduce.length() > 0)
-                        reduce += arrete.getFrom().getName() + "\n";
+                    if(cycleString.length() > 0)
+                        cycleString += arrete.getFrom().getName() + "\n";
                 }
                 else{
-                    reduce += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
+                    cycleString += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
                 }
             }
-            if(!reduce.endsWith("\n"))
-                reduce += currentNode.getName();
+            if(!cycleString.endsWith("\n"))
+                cycleString += currentNode.getName();
             else
-                reduce = reduce.substring(0, reduce.length()-1);
+                cycleString = cycleString.substring(0, cycleString.length()-1);
             System.out.println("Nouvelle situation:");
-            System.out.println(reduce);
+            System.out.println(cycleString);
         }
     }
 
