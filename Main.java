@@ -6,7 +6,6 @@ public class Main {
             graph.toFile("start.gv");
             graph.cycleDetect();
             graph.toFile("dettesNoCycles.gv");
-            System.out.println(graph.toDot());
         }
         else {
             System.out.println("Boum !");

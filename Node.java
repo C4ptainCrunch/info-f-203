@@ -42,17 +42,22 @@ public class Node {
 	}
 
 	public String toDot() {
-		String str = "";
+		String output = "";
 		Debt debt;
 		Node debtTo;
-		for(int i=0; i < debts.size(); i++){
+
+		// read through every debt the node has
+		for(int i=0; i < debts.size(); i++) {
 			debt = debts.get(i);
-			if(debt != null){
+			// if debt is solved, it is setted to null
+			if(debt != null) {
 				debtTo = debt.getTo();
-				str += String.format("\"%s\\n%d\" -> \"%s\\n%d\" [label=\"%d\"]%n",
+				// format a string like that : "CI\n75" -> "CJC\n40" [label="15"]
+				//								"source\nsource-money" -> "destination\ndestination-money" [label="debt-amount"]
+				output += String.format("\"%s\\n%d\" -> \"%s\\n%d\" [label=\"%d\"]%n",
 					name, balance, debtTo.getName(), debtTo.getBalance(), debt.getAmount());
 			}
 		}
-		return str;
+		return output;
 	}
 }
