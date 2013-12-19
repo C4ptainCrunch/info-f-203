@@ -67,7 +67,6 @@ public class Graph {
                 output = new String[3];
                 output = buffer.split(" ");
                 debt = Debt.fromInfo(this, output[0], output[1], Integer.parseInt(output[2]));
-                //addDebt(debt);
             }
         }
         catch (IOException e) {
