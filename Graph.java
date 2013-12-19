@@ -67,7 +67,7 @@ public class Graph {
                 output = new String[3];
                 output = buffer.split(" ");
                 debt = Debt.fromInfo(this, output[0], output[1], Integer.parseInt(output[2]));
-                addDebt(debt);
+                //addDebt(debt);
             }
         }
         catch (IOException e) {
@@ -108,85 +108,96 @@ public class Graph {
         return output;
     }
 
-    public void cycleDetect(){
+    public void cycleDetectAndResolve(){
         Iterator<Node>nodesIterator = nodes.values().iterator();
         Node node;
         Vector<Debt> stack;
         Vector<Node> stackNodes;
+
+        // walk through each node of the graph
         while (nodesIterator.hasNext()) {
             node = nodesIterator.next();
+            // check if node was already reached
             if (!node.isReached()){
-                //System.out.println("dfsfd");
+                // if not, try to detect a cycle by walking 
+                // in the graph, beginning from that node
                 stack = new Vector<Debt>();
                 stackNodes = new Vector<Node>();
-                cycleDetect(node, stack, stackNodes);
+                cycleDetectAndResolve(node, stack, stackNodes);
             }
         }
     }
 
-    private void cycleDetect(Node node, Vector<Debt> stack, Vector<Node> stackNodes) {
-        Vector<Debt>debts = node.getDebts();
-        Debt arrete = null;
-        int minAmount;
-        boolean stop;
-        int position;
-        int i;
-        int j;
-        Debt debt = null;
-        node.tag();
+    private void cycleResolve(Node currentNode, Debt currentDebt, Vector<Debt> stack, Vector<Node> stackNodes) {
+        boolean stop = false;
         String reduce = "";
+        int minAmount = 0;
+        int position, i;
+        Debt arrete = null;
 
-        for (j = 0; j < debts.size(); j++) {
-            debt = debts.get(j);
+        position = stackNodes.lastIndexOf(currentNode);
+
+        for (i = position; i < stack.size() && !stop; i++) {
+            arrete = stack.get(i);
+            if (arrete.getAmount() == 0) {
+                // Cycle was broken, stop
+                stop = true;
+            }
+            else {
+                if (arrete.getAmount() < minAmount || minAmount == 0) {
+                    minAmount = arrete.getAmount();
+                }
+                reduce += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
+            }
+        }
+        if (!stop) {
+            System.out.println("\nRéduction de " + minAmount);
+            reduce += String.format("%s (%d) -> ...", currentDebt.getFrom().getName(), currentDebt.getAmount());
+            System.out.println(reduce);
+
+            reduce = "";
+            for (; position < stack.size(); position++) {
+                arrete = stack.get(position);
+                if (arrete.amountSubstract(minAmount) == 0){
+                    if(reduce.length() > 0)
+                        reduce += arrete.getFrom().getName() + "\n";
+                }
+                else{
+                    reduce += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
+                }
+            }
+            if(!reduce.endsWith("\n"))
+                reduce += currentNode.getName();
+            else
+                reduce = reduce.substring(0, reduce.length()-1);
+            System.out.println("Nouvelle situation:");
+            System.out.println(reduce);
+        }
+    }
+
+    private void cycleDetectAndResolve(Node node, Vector<Debt> stack, Vector<Node> stackNodes) {
+        Vector<Debt> debts = node.getDebts();
+        Debt debt = null;
+        
+        int i;
+        
+        // tag the node as "reached"
+        node.tag();
+        
+        // walk through the node's debts
+        for (i = 0; i < debts.size(); i++) {
+            debt = debts.get(i);
             if(debt != null){
                 if (stackNodes.lastIndexOf(node) == -1) {
                     stack.add(debt);
                     stackNodes.add(node);
 
-                    cycleDetect(debt.getTo(), stack, stackNodes);
+                    cycleDetectAndResolve(debt.getTo(), stack, stackNodes);
                     stack.remove(stack.size() - 1);
                     stackNodes.remove(stackNodes.size() - 1);
                 }
                 else {
-                    position = stackNodes.lastIndexOf(node);
-                    minAmount = 0;
-                    stop = false;
-                    reduce = "";
-                    for (i = position; i < stack.size() && !stop; i++) {
-                        arrete = stack.get(i);
-                        if (arrete.getAmount() == 0) {
-                            stop = true;
-                        }
-                        else {
-                            if (arrete.getAmount() < minAmount || minAmount == 0) {
-                                minAmount = arrete.getAmount();
-                            }
-                            reduce += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
-                        }
-                    }
-                    if (!stop) {
-                        System.out.println("\nRéduction de " + minAmount);
-                        reduce += String.format("%s (%d) -> ...", debt.getFrom().getName(), debt.getAmount());
-                        System.out.println(reduce);
-
-                        reduce = "";
-                        for (; position < stack.size(); position++) {
-                            arrete = stack.get(position);
-                            if (arrete.amountSubstract(minAmount) == 0){
-                                if(reduce.length() > 0)
-                                    reduce += arrete.getFrom().getName() + "\n";
-                            }
-                            else{
-                                reduce += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
-                            }
-                        }
-                        if(!reduce.endsWith("\n"))
-                            reduce += node.getName();
-                        else
-                            reduce = reduce.substring(0, reduce.length()-1);
-                        System.out.println("Nouvelle situation:");
-                        System.out.println(reduce);
-                    }
+                    cycleResolve(node, debt, stack, stackNodes);
                 }
             }
         }

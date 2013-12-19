@@ -4,7 +4,7 @@ public class Main {
             String fileName = args[0];
             Graph graph = Graph.fromFile(fileName);
             graph.toFile("start.gv");
-            graph.cycleDetect();
+            graph.cycleDetectAndResolve();
             graph.toFile("dettesNoCycles.gv");
         }
         else {
