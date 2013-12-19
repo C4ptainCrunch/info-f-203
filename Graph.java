@@ -120,12 +120,12 @@ public class Graph {
         }
     }
 
-    private int minimalDebt(int position, DebtStack stack, String cycleString){
+    private int minimalDebt(int position, DebtStack stack, StringBuilder cycleString){
         int minAmount = 0;
         Debt arrete;
         for (int i = position; i < stack.size() && minAmount != -1 ; i++) {
             arrete = stack.get(i);
-            cycleString += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
+            cycleString.append(String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount()));
             if (arrete.getAmount() == 0)
                 // Cycle detected previousy was broken, abort
                 minAmount = -1;
@@ -138,7 +138,7 @@ public class Graph {
     }
 
     private void cycleResolve(Node currentNode, Debt currentDebt, DebtStack stack) {
-        String cycleString = "";
+        StringBuilder cycleString = new StringBuilder("");
         int minAmount = 0;
         int position, i;
         Debt arrete = null;
@@ -148,26 +148,26 @@ public class Graph {
         if (minAmount != -1) {
             System.out.println("\nRéduction de " + minAmount);
             // re-add first node to the end of the string
-            cycleString += String.format("%s (%d) -> ...", currentDebt.getFrom().getName(), currentDebt.getAmount());
+            cycleString.append(String.format("%s (%d) -> ...", currentDebt.getFrom().getName(), currentDebt.getAmount()));
             System.out.println(cycleString);
 
-            cycleString = "";
+            String cycle2 = "";
             for (; position < stack.size(); position++) {
                 arrete = stack.get(position);
                 if (arrete.amountSubstract(minAmount) == 0){
-                    if(cycleString.length() > 0)
-                        cycleString += arrete.getFrom().getName() + "\n";
+                    if(cycle2.length() > 0)
+                        cycle2 += arrete.getFrom().getName() + "\n";
                 }
                 else{
-                    cycleString += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
+                    cycle2 += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
                 }
             }
-            if(!cycleString.endsWith("\n"))
-                cycleString += currentNode.getName();
+            if(!cycle2.endsWith("\n"))
+                cycle2 += currentNode.getName();
             else
-                cycleString = cycleString.substring(0, cycleString.length()-1);
+                cycle2 = cycle2.substring(0, cycle2.length()-1);
             System.out.println("Nouvelle situation:");
-            System.out.println(cycleString);
+            System.out.println(cycle2);
         }
     }
 
