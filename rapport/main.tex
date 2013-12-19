@@ -37,7 +37,7 @@ Quand nous arrivons à une feuille, nous repartons en arrière jusqu'à l'embran
 
 A la fin de ce premier parcours, nous vérifions que tous les noeuds ont été parcourus (c'est à dire marqués) et si un noeud ne l'est pas, nous recommençons le même algorithme à partir de celui-ci.
 
-Lors de le recherche de cycle, nous passons par les noeuds déjà marqués car, il est possible qu'il faille passer par un noeud déjà marqué pour supprimer un cycle supplémentaire (voir figure \ref{whyTag}))
+Lors de le recherche de cycle, nous passons par les noeuds déjà marqués car, il est possible qu'il faille passer par un noeud déjà marqué pour supprimer un cycle supplémentaire (voir figure \ref{whyTag})
 
 \begin{figure}[h]
    \caption{\label{whyTag} titre}
@@ -64,17 +64,18 @@ Quand un cycle est détecté (avec le méthode décrite en \ref{detect}) nous de
 \subsection{Autres possibilités}
 \label{others}
 
-Dans la section \ref{detect} nous évoquions les autres possibilités auxquelles nous avons pensé mais que nous n'avons pas retenues. Une de celles ci -- la plus évidente surement -- était d'utiliser un simple algorithme de détection de cycles et donc de parcourir l'enièreté du graphe pour ensuite supprimer les cycles uns à uns. Cependant, nous n'avons pas rentenu cette méthode pour une raison simple : si une arrête appartient à plusieurs cycles et est de poids le plus faible dans un minimum un cycle, celle-ci sera supprimée et la racherche du 2ème cycle aura donc été inutile. Dans le pire des cas, l'arrête peut appartenir à tous les cycles et être la plus faible du premier des cycles, la totalité des autres cycles ayant été calculés en inutilement.
-
+Dans la section \ref{detect} nous évoquions les autres possibilités auxquelles nous avons pensé mais que nous n'avons pas retenues. Une de celles ci -- la plus évidente surement -- était d'utiliser un simple algorithme de détection de cycles et donc de parcourir l'entièreté du graphe pour ensuite supprimer les cycles uns à uns. Cependant, nous n'avons pas retenu cette méthode pour une raison simple : si une arrête appartient à plusieurs cycles et est de poids le plus faible dans un de ces cycles, celle-ci sera supprimée et la recherche des autres cycles la contenant aura donc été inutile. Dans le pire des cas, l'arrête peut appartenir à tous les cycles et être la plus faible du premier des cycles, la totalité des autres cycles ayant été calculés en inutilement.
 
 
 \subsubsection{Complexité}
 
 
 \section{Résolution de dettes}
-Pour résoudre les dettes, nous avons commencé par sélectionner une tête (c'est à dire un cercle qui n'a pas de créances ou dit autrement un noeud n'ayant pas de père) et de transférer tout son argent à ses créantiers jusqu'à épuisement de son compte ou remboursement de ses dettes. Ensuite nous appliquons la même méthode sur chacun des fils du noeud qui vient de rembourser ses dettes. Quand cette opération est finie, nous recommencons pour la tête suivante.
+Pour résoudre les dettes, nous avons commencé par sélectionner une tête (c'est à dire un cercle qui n'a pas de créances ou dit autrement un noeud n'ayant pas de père) et de transférer tout son argent à ses créanciers jusqu'à épuisement de son compte ou remboursement de ses dettes.
 
-Le fait d'effectuer cette opération sur chaque tête est bien entendu obligatoire car tous les noeuds ne sont pas accessibles depuis n'importe quelle tête. Cependant, on pourait penser que repasser sur un noeud quelconque si il a déjà été parcourru est inutile et qu'il faudrait donc les marquer pour éviter cela. Or nous devons parcourir à chaque fois tout le sous-graphe accessible depuis la tête courante puisqu'on peut débloquer une situation du type $C \rightarrow D$ ou $C$ n'a pas assez d'argent après le versement de $A$ mais en aurra assez après celui de $B$ (voir figure \ref{resolve}).
+Ensuite nous appliquons la même méthode sur chacun des fils du noeud qui vient de rembourser ses dettes. Quand cette opération est finie, nous recommençons pour la tête suivante.
+
+Le fait d'effectuer cette opération sur chaque tête est bien entendu obligatoire car tous les noeuds ne sont pas accessibles depuis n'importe quelle tête. Cependant, on pourrait penser que repasser sur un noeud quelconque si il a déjà été parcouru est inutile et qu'il faudrait donc les marquer pour éviter cela. Or nous devons parcourir à chaque fois tout le sous-graphe accessible depuis la tête courante puisqu'on peut débloquer une situation du type $C \rightarrow D$ ou $C$ n'a pas assez d'argent après le versement de $A$ mais en aura assez après celui de $B$ (voir figure \ref{resolve}).
 
 \begin{figure}[h]
    \caption{\label{resolve} titre}
@@ -83,13 +84,13 @@ Le fait d'effectuer cette opération sur chaque tête est bien entendu obligatoi
 \subsubsection{Complexité}
 
 \section{Implémentation et structures de données}
-Comme demandé dans les consignes, notre algorithme a été implémenté en \texttt{Java}. Notre codes est architecturé en 3 classes principales \texttt{Graph}, \texttt{Node} et \texttt{Debt} et deux autres \texttt{Main} ainsi que \texttt{DebtStack}.
+Comme demandé dans les consignes, notre algorithme a été implémenté en \texttt{Java}. Notre code est architecturé en 3 classes principales \texttt{Graph}, \texttt{Node} et \texttt{Debt} et deux autres \texttt{Main} ainsi que \texttt{DebtStack}.
 
 \begin{description}
 \item[\texttt{Graph}] contient un vecteur de références vers les noeuds (\texttt{Node}). Il s'occupe de se remplir lui même en parsant un fichier texte passé en paramètre. C'est aussi lui qui est responsable de la résolution des cycles et des dettes ainsi que de s'afficher en \texttt{dot} (en déléguant une partie aux noeuds).
 \item[\texttt{Node}] est un objet qui réprésente un cercle et qui contient son nom, son cash disponible ainsi qu'un vecteur de références vers les différentes dettes 
 (\texttt{Debt}) qu'il a contracté.
-\item[\texttt{Debt}] représente une dette entre deux cercles (c'est à dire une arête entre deux \texttt{Node}). Celle-ci contient une référence ces deux noeuds ainsi que le poids de l'arrête (le montant de la dette)
+\item[\texttt{Debt}] représente une dette entre deux cercles (c'est à dire une arête entre deux \texttt{Node}). Celle-ci contient une référence vers ces deux noeuds ainsi que le poids de l'arrête (le montant de la dette)
 \end{description}
 Les deux autres classes \texttt{Main} et \texttt{DebtStack} s'occupent respectivement de l'initialisation du programme et de fournir une interface propre à un vecteur de dettes en le faisant passer pour une stack tout en pouvant aller y chercher du contenu à une index arbitraire.
 
