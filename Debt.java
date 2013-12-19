@@ -7,6 +7,8 @@ public class Debt {
         this.from = from;
         this.to = to;
         this.amount = amount;
+        from.addDebt(this);
+        to.addCreance();
 	}
 
 	public Node getFrom() {
@@ -25,6 +27,7 @@ public class Debt {
         this.amount -= amount;
         if(this.amount == 0){
             from.removeDebt(this);
+            to.delCreance();
         }
         return this.amount;
     }
