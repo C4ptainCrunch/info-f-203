@@ -38,6 +38,35 @@ public class Graph {
         return graph;
     }
 
+    public void addNode(Node node){
+        nodes.put(node.getName(), node);
+    }
+
+    public Node getNode(String name) {
+        return nodes.get(name);
+    }
+
+    public void toFile(String fileName) {
+        try {
+            PrintWriter file = new PrintWriter(fileName, "UTF-8");
+            file.print(toDot());
+            file.close();
+        }
+        catch (IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public String toDot() {
+        String output = "digraph plop {\n";
+        Iterator<Node>nodesIterator = nodes.values().iterator();
+        while(nodesIterator.hasNext()) {
+            output += nodesIterator.next().toDot();
+        }
+        output += "}";
+        return output;
+    }
+
     private void addNodesFromReader(BufferedReader reader) {
         String buffer = null;
         int i = 0;
@@ -74,34 +103,6 @@ public class Graph {
         }
     }
 
-    public void toFile(String fileName) {
-        try {
-            PrintWriter file = new PrintWriter(fileName, "UTF-8");
-            file.print(toDot());
-            file.close();
-        }
-        catch (IOException ex){
-            ex.printStackTrace();
-        }
-    }
-
-    public void addNode(Node node){
-        nodes.put(node.getName(), node);
-    }
-
-    public Node getNode(String name) {
-        return nodes.get(name);
-    }
-    public String toDot() {
-        String output = "digraph plop {\n";
-        Iterator<Node>nodesIterator = nodes.values().iterator();
-        while(nodesIterator.hasNext()) {
-            output += nodesIterator.next().toDot();
-        }
-        output += "}";
-        return output;
-    }
-
     public void cycleDetectAndResolve(){
         Iterator<Node>nodesIterator = nodes.values().iterator();
         Node node;
@@ -117,6 +118,50 @@ public class Graph {
                 stack = new DebtStack();
                 cycleDetectAndResolve(node, stack);
             }
+        }
+    }
+
+    private void cycleDetectAndResolve(Node node, DebtStack stack) {
+        Vector<Debt> debts = node.getDebts();
+        Debt currentDebt = null;
+        int i;
+        
+        // tag the node as "reached"
+        node.tag();
+        
+        // walk through the node's debts
+        for (i = 0; i < debts.size(); i++) {
+            currentDebt = debts.get(i);
+            if(currentDebt != null){
+                // test if in the stack
+                if (stack.lastIndexOfNode(node) == -1) {
+                    // node not in the stack => no cycle
+                    stack.push(currentDebt);
+                    cycleDetectAndResolve(currentDebt.getTo(), stack);
+                    stack.pop();
+                }
+                else {
+                    // node in stack => cycle
+                    cycleResolve(node, currentDebt, stack);
+                }
+            }
+        }
+    }
+
+    private void cycleResolve(Node currentNode, Debt currentDebt, DebtStack stack) {
+        StringBuilder cycleString = new StringBuilder("");
+        int minAmount = 0;
+        int position, i;
+
+        position = stack.lastIndexOfNode(currentNode);
+        minAmount = minimalDebt(position, stack, cycleString);
+        if (minAmount != -1) {
+            System.out.println("\nRéduction de " + minAmount);
+            // re-add first node to the end of the string
+            cycleString.append(String.format("%s (%d) -> ...", currentDebt.getFrom().getName(), currentDebt.getAmount()));
+            System.out.println(cycleString);
+
+            cycleBreak(position, stack, minAmount);
         }
     }
 
@@ -158,51 +203,6 @@ public class Graph {
         System.out.println("Nouvelle situation:");
         System.out.println(cycleString);
     }
-
-    private void cycleResolve(Node currentNode, Debt currentDebt, DebtStack stack) {
-        StringBuilder cycleString = new StringBuilder("");
-        int minAmount = 0;
-        int position, i;
-
-        position = stack.lastIndexOfNode(currentNode);
-        minAmount = minimalDebt(position, stack, cycleString);
-        if (minAmount != -1) {
-            System.out.println("\nRéduction de " + minAmount);
-            // re-add first node to the end of the string
-            cycleString.append(String.format("%s (%d) -> ...", currentDebt.getFrom().getName(), currentDebt.getAmount()));
-            System.out.println(cycleString);
-
-            cycleBreak(position, stack, minAmount);
-        }
-    }
-
-    private void cycleDetectAndResolve(Node node, DebtStack stack) {
-        Vector<Debt> debts = node.getDebts();
-        Debt currentDebt = null;
-        int i;
-        
-        // tag the node as "reached"
-        node.tag();
-        
-        // walk through the node's debts
-        for (i = 0; i < debts.size(); i++) {
-            currentDebt = debts.get(i);
-            if(currentDebt != null){
-                // test if in the stack
-                if (stack.lastIndexOfNode(node) == -1) {
-                    // node not in the stack => no cycle
-                    stack.push(currentDebt);
-                    cycleDetectAndResolve(currentDebt.getTo(), stack);
-                    stack.pop();
-                }
-                else {
-                    // node in stack => cycle
-                    cycleResolve(node, currentDebt, stack);
-                }
-            }
-        }
-    }
-
 
     public void resolveDebt() {
         Iterator<Node>nodesIterator = nodes.values().iterator();

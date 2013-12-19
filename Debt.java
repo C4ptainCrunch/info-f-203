@@ -46,9 +46,16 @@ public class Debt {
     }
 
     public void resolveDebt() {
-        int newamont = from.pay(amount); 
-        to.add(amount - newamont);
-        setAmount(newamont);
+        int newAmount = from.pay(amount); 
+        if(amount != newAmount) {
+            System.out.print(String.format("%s (%d) -> %s", from.getName(), amount - newAmount, to.getName()));
+            if(newAmount > 0)
+                System.out.println(String.format("(Il reste %d à rembourser)", newAmount));
+            else
+                System.out.println("");
+        }
+        to.add(amount - newAmount);
+        setAmount(newAmount);
         to.resolveDebt();
     }
 }
