@@ -126,7 +126,6 @@ public class Graph {
         for (int i = position; i < stack.size() && minAmount != -1 ; i++) {
             arrete = stack.get(i);
             cycleString += String.format("%s (%d) -> ", arrete.getFrom().getName(), arrete.getAmount());
-
             if (arrete.getAmount() == 0)
                 // Cycle detected previousy was broken, abort
                 minAmount = -1;
