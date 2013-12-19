@@ -1,0 +1,5 @@
+digraph resolve {
+    "A" -> "C\n20" [label="10"]
+    "B" -> "C\n20" [label="30"]
+    "C\n20" -> "D" [label="40"]
+}

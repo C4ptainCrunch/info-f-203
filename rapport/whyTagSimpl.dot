@@ -1,0 +1,16 @@
+digraph cercle {
+    B
+    C
+    A[style=filled]
+    F[style=filled]
+    D[style=filled]
+    E[style=filled]
+    A -> B [constraint=false label="20"]
+    B -> C [label="30"]
+    C -> D [label="30"]
+    D -> E [label="40"]
+    E -> F [label="50"]
+    F -> A [constraint=false label="70"]
+    { rank=same; B A F }
+    { rank=same; C D E }
+}
