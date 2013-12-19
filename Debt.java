@@ -48,8 +48,9 @@ public class Debt {
     }
 
     public void resolveDebt() {
-        setAmount(from.pay(amount));
-        to.add(amount);
+        int newamont = from.pay(amount); 
+        to.add(amount - newamont);
+        setAmount(newamont);
         to.resolveDebt();
     }
 }

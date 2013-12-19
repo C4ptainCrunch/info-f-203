@@ -1,4 +1,5 @@
 import java.util.Vector;
+import java.util.Collections;
 
 public class Node {
 	private int balance;
@@ -59,6 +60,7 @@ public class Node {
 		String output = "";
 		Debt debt;
 		Node debtTo;
+		output += String.format("\"%s\\n%d\"\n", name, balance);
 
 		// read through every debt the node has
 		for(int i=0; i < debts.size(); i++) {
@@ -77,11 +79,12 @@ public class Node {
 
 	public void resolveDebt() {
 		Debt debt;
-		for(int i = 0; i < debts.size() && balance > 0; i++){
+		// Collections.sort(debts);
+		for(int i = 0; i < debts.size(); i++){
 			debt = debts.get(i);
 			if(debt != null){
 			System.out.println(debt.getFrom().name + " -> " + debt.getTo().name);
-				debt.resolveDebt();
+			debt.resolveDebt();
 			}
 		}
 	}
