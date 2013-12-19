@@ -5,12 +5,14 @@ public class Node {
 	private String name;
 	private Vector<Debt> debts;
 	private boolean reached;
+	private int creanceCounter;
 
 	public Node(String name, int balance) {
 		this.name = name;
 		this.balance = balance;
 		reached = false;
 		debts = new Vector<Debt>();
+		creanceCounter = 0;
 	}
 
 	public String getName() {
@@ -19,6 +21,18 @@ public class Node {
 	
 	public int getBalance() {
 		return balance;
+	}
+
+	public boolean isHead() {
+		return creanceCounter == 0;
+	}
+
+	public void addCreance() {
+		creanceCounter++;
+	}
+
+	public void delCreance() {
+		creanceCounter--;
 	}
 
 	public void addDebt(Debt debt) {

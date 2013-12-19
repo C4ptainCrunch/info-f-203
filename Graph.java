@@ -191,4 +191,9 @@ public class Graph {
             }
         }
     }
+
+
+    public void resolveDebt() {
+        
+    }
 }
