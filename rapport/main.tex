@@ -30,17 +30,21 @@ L'approche retenue a été de parcourir le graphe en profondeur, depuis un noeud
 
 A la fin de ce premier parcours, nous vérifions que tous les noeuds ont été parcourrus (c'est à dire marqués) et si un noeud ne l'est pas, nous recommencons le même algorithme à partir de celui-ci.
 
-Lors de le recheche de cycle, nous passons par les noeuds déjà marqués car, il est possible qu'il faille passer par un noeud déjà marqué pour supprimer un cycle supplémentaire(voir figure)
+Lors de le recheche de cycle, nous passons par les noeuds déjà marqués car, il est possible qu'il faille passer par un noeud déjà marqué pour supprimer un cycle supplémentaire(voir figure \ref{whyTag})
 
-%Mettre le diagram whyTag.dot ici
 \begin{figure}[h]
-   \caption{\label{etiquette} titre}
-   \includegraphics[]{whyTag.pdf}
+   \caption{\label{whyTag} titre}
+   \begin{center}
+   \includegraphics[scale=0.5]{whyTag.eps}
+   \end{center}
 \end{figure}
+\includegraphics[scale=0.5]{whyTag.eps}
 
 Ce qui nous donnerait apres premier passage (Si on supprime l'arrête $A \rightarrow D$ du cycle $A \rightarrow D \rightarrow E \rightarrow F \rightarrow A \rightarrow\ldots$):
-%Mettre le diagram whyTagSimpl.dot ici
-
+\begin{figure}[h]
+   \caption{\label{whyTagSimpl} titre}
+   \includegraphics[]{whyTagSimpl.eps}
+\end{figure}
 Lorsqu'on va arriver au noeud $D$, on va regarder si on peut passer au noeud $B$. Comme il est déjà marqué, nous allons pas nous en occuper et revenir en arrière. Nous allons donc pas détecter le cycle $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow A \rightarrow\ldots$  .
 
 \subsection{Suppression}
@@ -63,8 +67,12 @@ Dans la section \ref{detect} nous évoquions les autres possibilités auxquelles
 \section{Résolution de dettes}
 Pour résoudre les dettes, nous avons commencé par sélectionner une tête (c'est à dire un cercle qui n'a pas de créances ou dit autrement un noeud n'ayant pas de père) et de transférer tout son argent à ses créantiers jusqu'à épuisement de son compte ou remboursement de ses dettes. Ensuite nous appliquons la même méthode sur chacun des fils du noeud qui vient de rembourser ses dettes. Quand cette opération est finie, nous recommencons pour la tête suivante.
 
-Le fait d'effectuer cette opération sur chaque tête est bien entendu obligatoire car tous les noeuds ne sont pas accessibles depuis n'importe quelle tête. Cependant, on pourait penser que repasser sur un noeud quelconque si il a déjà été parcourru est inutile et qu'il faudrait donc les marquer pour éviter cela. Or nous devons parcourir à chaque fois tout le sous-graphe accessible depuis la tête courante puisqu'on peut débloquer une situation du type $C \rightarrow D$ ou $C$ n'a pas assez d'argent après le versement de $A$ mais en aurra assez après celui de $B$ (voir figure).
-% inclure resolve.dot
+Le fait d'effectuer cette opération sur chaque tête est bien entendu obligatoire car tous les noeuds ne sont pas accessibles depuis n'importe quelle tête. Cependant, on pourait penser que repasser sur un noeud quelconque si il a déjà été parcourru est inutile et qu'il faudrait donc les marquer pour éviter cela. Or nous devons parcourir à chaque fois tout le sous-graphe accessible depuis la tête courante puisqu'on peut débloquer une situation du type $C \rightarrow D$ ou $C$ n'a pas assez d'argent après le versement de $A$ mais en aurra assez après celui de $B$ (voir figure \ref{resolve}).
+
+\begin{figure}[h]
+   \caption{\label{resolve} titre}
+   \includegraphics[]{resolve.eps}
+\end{figure}
 \subsubsection{Complexité}
 
 \section{Implémentation et structures de données}
