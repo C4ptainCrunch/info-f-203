@@ -81,7 +81,7 @@ public class Graph {
             file.close();
         }
         catch (IOException ex){
-
+            e.printStackTrace();
         }
     }
 
@@ -132,7 +132,8 @@ public class Graph {
         for (i = position; i < stack.size() && !stop; i++) {
             arrete = stack.get(i);
             if (arrete.getAmount() == 0) {
-                // Cycle was broken, stop
+                // Cycle detected previousy was broken
+                // abort
                 stop = true;
             }
             else {
@@ -181,11 +182,13 @@ public class Graph {
             if(currentDebt != null){
                 // test if in the stack
                 if (stack.lastIndexOfNode(node) == -1) {
+                    // node not in the stack => no cycle
                     stack.push(currentDebt);
                     cycleDetectAndResolve(currentDebt.getTo(), stack);
                     stack.pop();
                 }
                 else {
+                    // node in stack => cycle
                     cycleResolve(node, currentDebt, stack);
                 }
             }
