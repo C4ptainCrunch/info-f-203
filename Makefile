@@ -1,7 +1,7 @@
 JFLAGS = 
 JC = javac
 
-CLASSES = Node.java Debt.java Graph.java Main.java 
+CLASSES = Node.java Debt.java Graph.java Main.java  DebtStack.java
 
 all: run
 
@@ -22,3 +22,4 @@ run: classes
 graph: classes run
 		cat dettesNoCycles.gv | dot -Tpng > nocycle.png
 		cat start.gv | dot -Tpng > start.png
+		cat dettesRemb.gv | dot -Tpng > remb.png

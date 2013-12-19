@@ -105,8 +105,7 @@ public class Graph {
     public void cycleDetectAndResolve(){
         Iterator<Node>nodesIterator = nodes.values().iterator();
         Node node;
-        Vector<Debt> stack;
-        Vector<Node> stackNodes;
+        DebtStack stack;
 
         // walk through each node of the graph
         while (nodesIterator.hasNext()) {
@@ -115,21 +114,20 @@ public class Graph {
             if (!node.isReached()){
                 // if not, try to detect a cycle by walking 
                 // in the graph, beginning from that node
-                stack = new Vector<Debt>();
-                stackNodes = new Vector<Node>();
-                cycleDetectAndResolve(node, stack, stackNodes);
+                stack = new DebtStack();
+                cycleDetectAndResolve(node, stack);
             }
         }
     }
 
-    private void cycleResolve(Node currentNode, Debt currentDebt, Vector<Debt> stack, Vector<Node> stackNodes) {
+    private void cycleResolve(Node currentNode, Debt currentDebt, DebtStack stack) {
         boolean stop = false;
         String reduce = "";
         int minAmount = 0;
         int position, i;
         Debt arrete = null;
 
-        position = stackNodes.lastIndexOf(currentNode);
+        position = stack.lastIndexOfNode(currentNode);
 
         for (i = position; i < stack.size() && !stop; i++) {
             arrete = stack.get(i);
@@ -169,10 +167,9 @@ public class Graph {
         }
     }
 
-    private void cycleDetectAndResolve(Node node, Vector<Debt> stack, Vector<Node> stackNodes) {
+    private void cycleDetectAndResolve(Node node, DebtStack stack) {
         Vector<Debt> debts = node.getDebts();
-        Debt debt = null;
-        
+        Debt currentDebt = null;
         int i;
         
         // tag the node as "reached"
@@ -180,18 +177,16 @@ public class Graph {
         
         // walk through the node's debts
         for (i = 0; i < debts.size(); i++) {
-            debt = debts.get(i);
-            if(debt != null){
-                if (stackNodes.lastIndexOf(node) == -1) {
-                    stack.add(debt);
-                    stackNodes.add(node);
-
-                    cycleDetectAndResolve(debt.getTo(), stack, stackNodes);
-                    stack.remove(stack.size() - 1);
-                    stackNodes.remove(stackNodes.size() - 1);
+            currentDebt = debts.get(i);
+            if(currentDebt != null){
+                // test if in the stack
+                if (stack.lastIndexOfNode(node) == -1) {
+                    stack.push(currentDebt);
+                    cycleDetectAndResolve(currentDebt.getTo(), stack);
+                    stack.pop();
                 }
                 else {
-                    cycleResolve(node, debt, stack, stackNodes);
+                    cycleResolve(node, currentDebt, stack);
                 }
             }
         }
