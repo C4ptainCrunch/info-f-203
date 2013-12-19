@@ -29,6 +29,7 @@ public class Debt {
         return this.amount;
     }
 
+    // Create a debt with Node and take corresponding Nodes.
     public static Debt fromInfo(Graph graph, String from, String to, int amount) {
         return new Debt(graph.getNode(from), graph.getNode(to), amount);
     }
