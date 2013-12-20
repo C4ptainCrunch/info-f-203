@@ -6,6 +6,7 @@
 \usepackage{amssymb}
 \usepackage[utf8]{inputenc}
 \usepackage[francais]{babel}
+\usepackage{fullpage}
 
 
 \title{{\normalsize{INFO-F-203 -- Algorithmique 2}}\\Manipulation de graphes\\ Transfert d’argent}
@@ -47,7 +48,7 @@ Lors de le recherche de cycle, nous passons par les noeuds déjà marqués car i
 \end{figure}
 
 La figure \ref{whyTag} est transformée en la figure \ref{whyTagSimpl} après un premier passage
-(ou l'on supprime l'arrête $A \rightarrow D$ du cycle $A \rightarrow D \rightarrow E \rightarrow F \rightarrow A$)
+(ou l'on supprime l'arrête $A \rightarrow D$ du cycle $[A \rightarrow D \rightarrow E \rightarrow F]$)
 
 \begin{figure}[h]
    \caption{\label{whyTagSimpl} Passage multiple par un noeud : situation après suppression d'un cycle}
@@ -57,7 +58,7 @@ La figure \ref{whyTag} est transformée en la figure \ref{whyTagSimpl} après un
 \end{figure}
 
 
-Dans la figure \ref{whyTagSimpl}, lorsqu'on arrive au noeud $C$, on regarde si on peut passer au noeud $D$ qui est déjà marqué. Si nous avions décidé de l'ignorer et que nous revenons en arrière nous n'aurions pas détecté le cycle $A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow A$.
+Dans la figure \ref{whyTagSimpl}, lorsqu'on arrive au noeud $C$, on regarde si on peut passer au noeud $D$ qui est déjà marqué. Si nous avions décidé de l'ignorer et que nous revenons en arrière nous n'aurions pas détecté le cycle $[A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F]$.
 
 \subsection{Suppression}
 \label{del}
@@ -71,10 +72,9 @@ Dans la section \ref{detect} nous évoquions les autres possibilités auxquelles
 
 Une de celles ci -- la plus évidente surement -- était d'utiliser un simple algorithme de détection de cycles et donc de parcourir l'entièreté du graphe pour ensuite supprimer les cycles uns à uns.
 
-Cependant, nous n'avons pas retenu cette méthode pour une raison simple : si une arrête appartient à plusieurs cycles et que le poids de celle est le plus faible d'un des cycles, celle-ci sera supprimée et la recherche des autres cycles la contenant aura donc été inutile. Dans le pire des cas, l'arrête peut appartenir à tous les cycles d'un graphe et être la plus faible du premier des cycles examiné et donc la totalité des autres cycles auront été calculés en inutilement.
-
+Cependant, nous n'avons pas retenu cette méthode pour une raison simple : si une arrête appartient à plusieurs cycles (comme l'arrête $B \rightarrow C$ dans la figure \ref{multiCycle}) et que le poids de celle-ci est le plus faible d'un des cycles, celle-ci sera supprimée et la recherche des autres cycles la contenant aura donc été inutile. Dans le pire des cas, l'arrête peut appartenir à tous les cycles d'un graphe et être la plus faible du premier des cycles examiné et donc la totalité des autres cycles auront été calculés en inutilement. (Les cycles $[B \rightarrow C \rightarrow D]$, $[B \rightarrow C \rightarrow E]$, $[B \rightarrow C \rightarrow E \rightarrow F \rightarrow A]$ n'existent plus après la suppression de $B \rightarrow C$)
 \begin{figure}[h]
-    \caption{\label{multiCycle} Suppression d'une arrête reliant plusieurs cycles}
+    \caption{\label{multiCycle} Suppression d'une arrête ($B \rightarrow C$) appartenant à plusieurs cycles}
     \center
     \includegraphics[height=150pt]{multiCycle.pdf}
 \end{figure}
