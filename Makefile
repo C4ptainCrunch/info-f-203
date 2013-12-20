@@ -2,24 +2,13 @@ JFLAGS =
 JC = javac
 
 CLASSES = Node.java Debt.java Graph.java Main.java  DebtStack.java
+OBJECT = $(CLASSES:.java=.class)
 
-all: run
+all: $(OBJECT)
 
-.SUFFIXES: .java .class
-.java.class:
-		$(JC) $(JFLAGS) $*.java
-
-default: classes
-
-classes: $(CLASSES:.java=.class)
+$(OBJECT):$(CLASSES)
+	$(JC) $(JFLAGS) $^
 
 clean:
-		$(RM) *.class
+	$(RM) *.class
 
-run: classes
-		java Main exemples/1
-
-graph: classes run
-		cat dettesNoCycles.gv | dot -Tpng > nocycle.png
-		cat start.gv | dot -Tpng > start.png
-		cat dettesRemb.gv | dot -Tpng > remb.png
