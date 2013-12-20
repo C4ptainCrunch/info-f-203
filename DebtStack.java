@@ -1,5 +1,6 @@
 import java.util.Vector;
 
+// Proxification of a Vector<Debt> to provide a tweaked stack.
 public class DebtStack {
 	private Vector<Debt> vect;
 
@@ -7,6 +8,8 @@ public class DebtStack {
 		vect = new Vector<Debt>();
 	}
 
+	// Return the first index (begining on top of the stack)
+	// where the Debt source is `node`
 	public int lastIndexOfNode(Node node){
 		int index = -1;
 		int i = size();

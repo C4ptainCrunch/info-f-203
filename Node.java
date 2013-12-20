@@ -56,6 +56,7 @@ public class Node {
 		debts.set(debts.indexOf(debt), null);
 	}
 
+	// return itself in a dot-formatted string
 	public String toDot() {
 		String output = "";
 		Debt debt;
@@ -75,6 +76,7 @@ public class Node {
 		return output;
 	}
 
+	// resolve all non null debts
 	public void resolveDebt() {
 		Debt debt;
 		for(int i = 0; i < debts.size(); i++){

@@ -46,6 +46,7 @@ public class Graph {
         return nodes.get(name);
     }
 
+    // save current state to a dot file
     public void toFile(String fileName) {
         try {
             PrintWriter file = new PrintWriter(fileName, "UTF-8");
@@ -57,6 +58,7 @@ public class Graph {
         }
     }
 
+    // return current state into a dot formatted string
     public String toDot() {
         String output = "digraph plop {\n";
         Iterator<Node>nodesIterator = nodes.values().iterator();
@@ -204,6 +206,7 @@ public class Graph {
         System.out.println(cycleString);
     }
 
+    // resolve all debts by calling Node.resolveDebt on all heads.
     public void resolveDebt() {
         Iterator<Node>nodesIterator = nodes.values().iterator();
         Node node;
