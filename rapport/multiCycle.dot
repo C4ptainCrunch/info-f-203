@@ -1,7 +1,6 @@
 digraph multiCycle {
     A -> B [label="20" constraint=false]
-    B -> C [label="15" style=bold]
-    // bold or dotted pour le style
+    B -> C [label="15" style=dotted]
     C -> D [label="70"]
     D -> B [label="80"]
     C -> E [label="30"]
